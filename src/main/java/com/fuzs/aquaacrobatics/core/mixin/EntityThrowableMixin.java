@@ -19,16 +19,22 @@ public abstract class EntityThrowableMixin extends Entity {
         super(worldIn);
     }
 
+    private final boolean aqua$isNewProjectile = aqua$checkEntityEligibleForProjectile();
+
+    private boolean aqua$checkEntityEligibleForProjectile() {
+        return ConfigHandler.MovementConfig.newProjectileBehavior && getClass().getName().startsWith("net.minecraft.");
+    }
+
     @Redirect(method = "onUpdate", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;rayTraceBlocks(Lnet/minecraft/util/math/Vec3d;Lnet/minecraft/util/math/Vec3d;)Lnet/minecraft/util/math/RayTraceResult;"))
     private RayTraceResult rayTraceThroughLiquid(World world, Vec3d start, Vec3d end) {
-        if(ConfigHandler.MovementConfig.newProjectileBehavior)
+        if(aqua$isNewProjectile)
             return world.rayTraceBlocks(start, end, false, true, false);
         else
             return world.rayTraceBlocks(start, end);
     }
     @Inject(method = "onUpdate", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/projectile/EntityThrowable;posX:D", opcode = Opcodes.PUTFIELD, ordinal = 0))
     private void doCheckBlockCollision(CallbackInfo ci) {
-        if(ConfigHandler.MovementConfig.newProjectileBehavior)
+        if(aqua$isNewProjectile)
             this.doBlockCollisions();
     }
 }
