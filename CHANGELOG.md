@@ -3,6 +3,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog].
 
+## [v1.15.4-1.12.2] - 2024-03-31
+### Fixed
+- Furniture Mod mirror rendering one block too high
+- New projectile behavior breaking gameplay mechanics from some mods with custom projectiles
+
 ## [v1.15.2-1.12.2] - 2023-02-11
 ### Fixed
 - Crash with Trinkets & Baubles
