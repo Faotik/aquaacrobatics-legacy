@@ -229,7 +229,7 @@ curseforge {
         project_game_versions.split(",").each {
             addGameVersion it.trim()
         }
-        mainArtifact(jar) {
+        mainArtifact(reobfJar) {
             displayName = "[FORGE] [${mc_version}] ${rootProject.name}-v${mod_version}"
             relations {
                 requiredDependency 'mixinbootstrap'
