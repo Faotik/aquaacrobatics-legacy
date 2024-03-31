@@ -2,6 +2,7 @@ package com.fuzs.aquaacrobatics.core.mixin.client;
 
 import com.fuzs.aquaacrobatics.integration.IntegrationManager;
 import com.fuzs.aquaacrobatics.util.math.MathHelperNew;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
@@ -35,10 +36,10 @@ public abstract class EntityRendererMixin {
 
     @ModifyVariable(method = "orientCamera", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/Entity;prevPosX:D", ordinal = 0), ordinal = 1)
     public float getEyeHeight(float eyeHeight) {
+        Entity entity = this.mc.getRenderViewEntity();
 
-        // random patches has this feature as well
-        if (IntegrationManager.isRandomPatchesEnabled()) {
-
+        // Do not apply eye height patch if the camera is not a player, or if Random Patches is installed
+        if (!(entity instanceof EntityPlayer) || IntegrationManager.isRandomPatchesEnabled()) {
             return eyeHeight;
         }
 
