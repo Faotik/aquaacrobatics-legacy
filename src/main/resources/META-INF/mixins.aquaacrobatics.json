@@ -26,6 +26,7 @@
   ],
   "client": [
     "client.BlockFluidRendererMixin",
+    "client.BlockAliasesBubbleColumnMixin",
     "client.EntityPlayerSPMixin",
     "client.EntityRendererMixin",
     "client.ItemRendererMixin",

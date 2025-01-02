@@ -46,6 +46,10 @@ public class CommonProxy {
 
     }
 
+    public void onMappings() {
+
+    }
+
     @SubscribeEvent
     public static void registerBlocks(RegistryEvent.Register<Block> event) {
         if(ConfigHandler.MiscellaneousConfig.bubbleColumns)

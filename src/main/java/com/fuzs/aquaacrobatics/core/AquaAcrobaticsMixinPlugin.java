@@ -35,6 +35,11 @@ public class AquaAcrobaticsMixinPlugin implements IMixinConfigPlugin {
                 return false;
             }
         }
+
+        if(mixinClassName.equals("com.fuzs.aquaacrobatics.core.mixin.client.BlockAliasesBubbleColumnMixin")) {
+            return doesClassExist("optifine.OptiFineForgeTweaker");
+        }
+
         return true;
     }
 

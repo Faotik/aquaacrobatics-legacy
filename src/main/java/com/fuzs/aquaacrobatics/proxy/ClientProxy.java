@@ -58,9 +58,17 @@ public class ClientProxy extends CommonProxy {
         }
     }
 
+
     @Override
     public void onInit() {
         Keybindings.register();
+    }
+
+    @Override
+    public void onMappings() {
+        if (OptifineHelper.isOFPresent) {
+            OptifineHelper.reloadBlockAliases();
+        }
     }
 
     @SubscribeEvent
