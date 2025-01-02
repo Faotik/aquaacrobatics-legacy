@@ -1,16 +1,11 @@
 package com.fuzs.aquaacrobatics.optifine;
 
 import com.fuzs.aquaacrobatics.AquaAcrobatics;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.event.FMLModIdMappingEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import shadersmod.client.BlockAliases;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.sql.Ref;
 
 public class OptifineHelper {
     public static boolean isOFPresent;
