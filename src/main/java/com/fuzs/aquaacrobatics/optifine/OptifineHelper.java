@@ -37,6 +37,9 @@ public class OptifineHelper {
         isOFPresent = true;
     }
 
+    /**
+     * Force a reload of the block aliases when FML ID mappings change.
+     */
     public static void reloadBlockAliases() {
         try {
             Class<?> blockAliasesClass = Class.forName("net.optifine.shaders.BlockAliases");
@@ -49,12 +52,14 @@ public class OptifineHelper {
         }
     }
 
+    /**
+     * Rewrite an OptiFine shader block alias to use the same metadata filters but a different main block ID.
+     */
     public static Object rewriteBlockAliasForNewId(int mainId, Object blockAlias) {
         if (blockAlias == null) {
             return null;
         }
         try {
-            System.out.println(blockAlias.getClass());
             Field blockAliasIdField = blockAlias.getClass().getDeclaredField("blockAliasId");
             blockAliasIdField.setAccessible(true);
             int blockAliasId = blockAliasIdField.getInt(blockAlias);

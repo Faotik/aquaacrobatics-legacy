@@ -20,6 +20,10 @@ import java.util.stream.Collectors;
 @Pseudo
 @Mixin(targets = {"net/optifine/shaders/BlockAliases"})
 public class BlockAliasesBubbleColumnMixin {
+    /**
+     * @author embeddedt
+     * @reason inject the bubble column into the block aliases
+     */
     @Inject(method = "loadBlockAliases", at = @At("RETURN"), remap = false)
     private static void injectAABubbleColumn(InputStream in, String path, List<List<?>> listBlockAliases, CallbackInfo ci) {
         if (!ConfigHandler.MiscellaneousConfig.bubbleColumns) {
@@ -50,7 +54,5 @@ public class BlockAliasesBubbleColumnMixin {
         }
 
         listBlockAliases.set(targetId, bubbleColumnMappings);
-
-        AquaAcrobaticsCore.LOGGER.info("Bubble column compat added for shader");
     }
 }
