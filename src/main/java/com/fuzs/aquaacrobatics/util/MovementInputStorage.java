@@ -14,24 +14,28 @@ public class MovementInputStorage extends MovementInput {
 
         this.moveStrafe = movement.moveStrafe;
         this.moveForward = movement.moveForward;
-        this.forwardKeyDown = movement.forwardKeyDown;
-        this.backKeyDown = movement.backKeyDown;
-        this.leftKeyDown = movement.leftKeyDown;
-        this.rightKeyDown = movement.rightKeyDown;
+        // this.forwardKeyDown = movement.forwardKeyDown;
+        // this.backKeyDown = movement.backKeyDown;
+        // this.leftKeyDown = movement.leftKeyDown;
+        // this.rightKeyDown = movement.rightKeyDown;
         this.jump = movement.jump;
         this.sneak = movement.sneak;
     }
 
     public static void updatePlayerMoveState(MovementInput movement, GameSettings gameSettings, boolean isCrouching) {
 
-        movement.forwardKeyDown = gameSettings.keyBindForward.isKeyDown();
-        movement.backKeyDown = gameSettings.keyBindBack.isKeyDown();
-        movement.leftKeyDown = gameSettings.keyBindLeft.isKeyDown();
-        movement.rightKeyDown = gameSettings.keyBindRight.isKeyDown();
-        movement.moveForward = movement.forwardKeyDown == movement.backKeyDown ? 0.0F : (movement.forwardKeyDown ? 1.0F : -1.0F);
-        movement.moveStrafe = movement.leftKeyDown == movement.rightKeyDown ? 0.0F : (movement.leftKeyDown ? 1.0F : -1.0F);
-        movement.jump = gameSettings.keyBindJump.isKeyDown();
-        movement.sneak = gameSettings.keyBindSneak.isKeyDown();
+        // movement.forwardKeyDown = gameSettings.keyBindForward.isKeyDown();
+        // movement.backKeyDown = gameSettings.keyBindBack.isKeyDown();
+        // movement.leftKeyDown = gameSettings.keyBindLeft.isKeyDown();
+        // movement.rightKeyDown = gameSettings.keyBindRight.isKeyDown();
+        // movement.moveForward = movement.forwardKeyDown == movement.backKeyDown ? 0.0F : (movement.forwardKeyDown ?
+        // 1.0F : -1.0F);
+        // movement.moveStrafe = movement.leftKeyDown == movement.rightKeyDown ? 0.0F : (movement.leftKeyDown ? 1.0F :
+        // -1.0F);
+        movement.moveForward = gameSettings.keyBindForward.getIsKeyPressed() == gameSettings.keyBindBack.getIsKeyPressed() ? 0.0F : gameSettings.keyBindForward.getIsKeyPressed() ? 1.0F : -1.0F;
+        movement.moveStrafe = gameSettings.keyBindLeft.getIsKeyPressed() == gameSettings.keyBindRight.getIsKeyPressed() ? 0.0F : gameSettings.keyBindLeft.getIsKeyPressed() ? 1.0F : -1.0F;
+        movement.jump = gameSettings.keyBindJump.getIsKeyPressed();
+        movement.sneak = gameSettings.keyBindSneak.getIsKeyPressed();
         if (isCrouching) {
 
             movement.moveStrafe = (float) ((double) movement.moveStrafe * 0.3);

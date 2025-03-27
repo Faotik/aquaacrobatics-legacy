@@ -3,25 +3,27 @@ package com.fuzs.aquaacrobatics.config;
 import com.fuzs.aquaacrobatics.AquaAcrobatics;
 import com.fuzs.aquaacrobatics.biome.BiomeWaterFogColors;
 import com.fuzs.aquaacrobatics.client.handler.FogHandler;
-import net.minecraftforge.common.config.Config;
-import net.minecraftforge.common.config.ConfigManager;
-import net.minecraftforge.fml.client.event.ConfigChangedEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import com.gtnewhorizon.gtnhlib.config.Config;
+import com.gtnewhorizon.gtnhlib.eventbus.EventBusSubscriber;
+import cpw.mods.fml.client.event.ConfigChangedEvent;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 @Config(modid = AquaAcrobatics.MODID)
-@Mod.EventBusSubscriber
+@EventBusSubscriber
 public class ConfigHandler {
 
     @Config.Name("Push Player Out Of Blocks")
-    @Config.Comment({"STANDARD - The player will occasionally be pushed out of certain spaces. Collisions are evaluated for full cubes only, non-full cubes are ignored. This is the default behavior up to Minecraft 1.12.", "APPROXIMATE - The player can move into more spaces, but will still be pushed out of some. Collisions are evaluated for full cubes only, non-full cubes are ignored.", "EXACT - The player can move into all spaces as expected. Collisions are evaluated for all types of cubes. This is the default behavior in Minecraft 1.13 and onwards."})
+    @Config.Comment({
+        "STANDARD - The player will occasionally be pushed out of certain spaces. Collisions are evaluated for full cubes only, non-full cubes are ignored. This is the default behavior up to Minecraft 1.12.",
+        "APPROXIMATE - The player can move into more spaces, but will still be pushed out of some. Collisions are evaluated for full cubes only, non-full cubes are ignored.",
+        "EXACT - The player can move into all spaces as expected. Collisions are evaluated for all types of cubes. This is the default behavior in Minecraft 1.13 and onwards." })
     public static PlayerBlockCollisions playerBlockCollisions = PlayerBlockCollisions.APPROXIMATE;
 
     @SuppressWarnings("unused")
     @Config.Name("blocks")
     @Config.Comment("Block-related config options (must match server).")
     public static BlocksConfig blocksConfig;
-    
+
     @SuppressWarnings("unused")
     @Config.Name("movement")
     @Config.Comment("Movement related config options.")
@@ -61,7 +63,7 @@ public class ConfigHandler {
 
         @Config.Name("Enable Toggle Crawling")
         @Config.Comment("Enables a keybind to toggle crawling.")
-        public static boolean enableToggleCrawling = false;
+        public static boolean enableToggleCrawling = true;
 
         @Config.Name("New Projectile Behavior")
         @Config.Comment("Modify projectile behavior to be closer to that of newer versions (fixes MC-73884 and allows bubble columns to work with ender pearls).")
@@ -74,6 +76,7 @@ public class ConfigHandler {
     }
 
     public static class BlocksConfig {
+
         @Config.Name("Seagrass")
         @Config.Comment("Allow seagrass to generate in the world.")
         public static boolean seagrass = false;
@@ -99,12 +102,12 @@ public class ConfigHandler {
 
         @Config.Name("Sneaking Dismounts Parrots")
         @Config.Comment("Parrots no longer leave the players shoulders as easily, instead the player needs to press the sneak key.")
-        public static boolean sneakingForParrots = true;
+        public static boolean sneakingForParrots = false;
 
         @Config.Name("Eating Animation")
         @Config.Comment("Animate eating in third-person view.")
         public static boolean eatingAnimation = true;
-        
+
         @Config.Name("Bubble Columns")
         @Config.Comment("Enable bubble columns.")
         public static boolean bubbleColumns = false;
@@ -115,7 +118,8 @@ public class ConfigHandler {
 
         @Config.Name("WorldProvider Fog Blacklist")
         @Config.Comment("List of WorldProviders in which fog should be disabled.")
-        public static String[] providerFogBlacklist = new String[] { "thebetweenlands.common.world.WorldProviderBetweenlands" };
+        public static String[] providerFogBlacklist = new String[] {
+            "thebetweenlands.common.world.WorldProviderBetweenlands" };
 
         @Config.Name("Floating Items")
         @Config.Comment("Whether or not items should float in water like in 1.13+.")
@@ -124,65 +128,66 @@ public class ConfigHandler {
 
     public static class IntegrationConfig {
 
-        private static final String COMPAT_DESCRIPTION = "Only applies when the mod is installed. Disable when there are issues with the mod.";
+        // private static final String COMPAT_DESCRIPTION = "Only applies when the mod is installed. Disable when there
+        // are issues with the mod.";
 
         @Config.Name("Applied Energistics 2 Integration")
-        @Config.Comment(COMPAT_DESCRIPTION)
+        // @Config.Comment(COMPAT_DESCRIPTION)
         @Config.RequiresMcRestart
         public static boolean ae2Integration = true;
 
         @Config.Name("Betweenlands Integration")
-        @Config.Comment(COMPAT_DESCRIPTION)
+        // @Config.Comment(COMPAT_DESCRIPTION)
         @Config.RequiresMcRestart
         public static boolean betweenlandsIntegration = true;
 
         @Config.Name("Chiseled Me Integration")
-        @Config.Comment(COMPAT_DESCRIPTION)
+        // @Config.Comment(COMPAT_DESCRIPTION)
         @Config.RequiresMcRestart
         public static boolean chiseledMeIntegration = true;
 
         @Config.Name("Ender IO Integration")
-        @Config.Comment(COMPAT_DESCRIPTION)
+        // @Config.Comment(COMPAT_DESCRIPTION)
         @Config.RequiresMcRestart
         public static boolean enderIoIntegration = true;
-        
+
         @Config.Name("Random Patches Integration")
-        @Config.Comment(COMPAT_DESCRIPTION)
+        // @Config.Comment(COMPAT_DESCRIPTION)
         public static boolean randomPatchesIntegration = true;
 
         @Config.Name("Mo' Bends Integration")
-        @Config.Comment(COMPAT_DESCRIPTION)
+        // @Config.Comment(COMPAT_DESCRIPTION)
         @Config.RequiresMcRestart
         public static boolean moBendsIntegration = true;
 
         @Config.Name("Wings Integration")
-        @Config.Comment(COMPAT_DESCRIPTION)
+        // @Config.Comment(COMPAT_DESCRIPTION)
         public static boolean wingsIntegration = true;
 
         @Config.Name("ArtemisLib Integration")
-        @Config.Comment(COMPAT_DESCRIPTION)
+        // @Config.Comment(COMPAT_DESCRIPTION)
         @Config.RequiresMcRestart
         public static boolean artemisLibIntegration = true;
 
         @Config.Name("Morph Integration")
-        @Config.Comment(COMPAT_DESCRIPTION)
+        // @Config.Comment(COMPAT_DESCRIPTION)
         public static boolean morphIntegration = true;
 
         @Config.Name("Hats Integration")
-        @Config.Comment(COMPAT_DESCRIPTION)
+        // @Config.Comment(COMPAT_DESCRIPTION)
         @Config.RequiresMcRestart
         public static boolean hatsIntegration = true;
 
         @Config.Name("Thaumic Augmentation Integration")
-        @Config.Comment(COMPAT_DESCRIPTION)
+        // @Config.Comment(COMPAT_DESCRIPTION)
         public static boolean thaumicAugmentationIntegration = true;
 
         @Config.Name("Trinkets and Baubles Integration")
-        @Config.Comment(COMPAT_DESCRIPTION)
+        // @Config.Comment(COMPAT_DESCRIPTION)
         public static boolean trinketsAndBaublesIntegration = true;
 
         @Config.Name("Witchery: Resurrected Integration")
-        @Config.Comment(COMPAT_DESCRIPTION)
+        // @Config.Comment(COMPAT_DESCRIPTION)
         public static boolean witcheryResurrectedIntegration = true;
 
     }
@@ -191,10 +196,10 @@ public class ConfigHandler {
     @SubscribeEvent
     public static void onConfigChanged(final ConfigChangedEvent.OnConfigChangedEvent evt) {
 
-        if (evt.getModID().equals(AquaAcrobatics.MODID)) {
-
-            ConfigManager.sync(AquaAcrobatics.MODID, Config.Type.INSTANCE);
-        }
+        // if (evt.modID.equals(AquaAcrobatics.MODID)) {
+        //
+        // ConfigManager.sync(AquaAcrobatics.MODID, Config.Type.INSTANCE);
+        // }
         BiomeWaterFogColors.recomputeColors();
         FogHandler.recomputeBlacklist();
     }
@@ -202,7 +207,9 @@ public class ConfigHandler {
     @SuppressWarnings("unused")
     public enum PlayerBlockCollisions {
 
-        STANDARD, APPROXIMATE, EXACT
+        STANDARD,
+        APPROXIMATE,
+        EXACT
     }
 
 }

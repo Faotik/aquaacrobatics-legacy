@@ -1,24 +1,25 @@
 package com.fuzs.aquaacrobatics.network.message;
 
-import com.fuzs.aquaacrobatics.entity.player.IPlayerResizeable;
-import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import com.fuzs.aquaacrobatics.entity.player.IPlayerResizeable;
+import cpw.mods.fml.common.network.simpleimpl.IMessage;
+import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
+import cpw.mods.fml.common.network.simpleimpl.MessageContext;
+import io.netty.buffer.ByteBuf;
 
 public class PacketSendKey implements IMessage {
+
     public enum KeybindPacket {
         UNKNOWN,
         TOGGLE_CRAWLING
     }
+
     private KeybindPacket keybind = KeybindPacket.UNKNOWN;
 
     @Override
     public void fromBytes(ByteBuf buf) {
         int idx = buf.readInt();
-        if(idx >= KeybindPacket.values().length)
+        if (idx >= KeybindPacket.values().length)
             keybind = KeybindPacket.UNKNOWN;
         else
             keybind = KeybindPacket.values()[idx];
@@ -44,16 +45,21 @@ public class PacketSendKey implements IMessage {
             // your 'handle' code is run on the main Minecraft thread. 'onMessage' itself
             // is called on the networking thread so it is not safe to do a lot of things
             // here.
-            FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> handle(message, ctx));
+            // FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> handle(message, ctx));
+            EntityPlayerMP playerEntity = ctx.getServerHandler().playerEntity;
+            if (message.keybind == KeybindPacket.TOGGLE_CRAWLING) {
+                IPlayerResizeable resizeable = (IPlayerResizeable) playerEntity;
+                resizeable.setForcingCrawling(resizeable.isForcingCrawling());
+            }
             return null;
         }
 
-        private void handle(PacketSendKey message, MessageContext ctx) {
-            EntityPlayerMP playerEntity = ctx.getServerHandler().player;
-            if(message.keybind == KeybindPacket.TOGGLE_CRAWLING) {
-                IPlayerResizeable resizeable = (IPlayerResizeable)playerEntity;
-                resizeable.setForcingCrawling(!resizeable.isForcingCrawling());
-            }
-        }
+//        private void handle(PacketSendKey message, MessageContext ctx) {
+//            EntityPlayerMP playerEntity = ctx.getServerHandler().playerEntity;
+//            if(message.keybind == KeybindPacket.TOGGLE_CRAWLING) {
+//                IPlayerResizeable resizeable = (IPlayerResizeable)playerEntity;
+//                resizeable.setForcingCrawling(!resizeable.isForcingCrawling());
+//            }
+//        }
     }
 }
