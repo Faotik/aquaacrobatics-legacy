@@ -46,7 +46,7 @@ public abstract class EntityBoatMixin extends Entity implements IBubbleColumnInt
     }
 
     @Override
-    public void aqua$doRegisterData() {this.getDataWatcher().addObject(29, 0);}
+    public void aqua$doRegisterData() {this.getDataWatcher().addObject(ConfigHandler.MiscellaneousConfig.BoatId, 0);}
 
     @Inject(method = "onUpdate", at = @At(value = "INVOKE", target = "net/minecraft/entity/item/EntityBoat.setRotation(FF)V", ordinal = 1))
     private void updateRocking(CallbackInfo ci) {
@@ -100,13 +100,13 @@ public abstract class EntityBoatMixin extends Entity implements IBubbleColumnInt
     public void setRockingTicks(int p_203055_1_) {
         if (!ConfigHandler.MiscellaneousConfig.bubbleColumns)
             return;
-        this.dataWatcher.updateObject(29, p_203055_1_);
+        this.dataWatcher.updateObject(ConfigHandler.MiscellaneousConfig.BoatId, p_203055_1_);
     }
 
     public int getRockingTicks() {
         if (!ConfigHandler.MiscellaneousConfig.bubbleColumns)
             return 0;
-        return this.dataWatcher.getWatchableObjectInt(29);
+        return this.dataWatcher.getWatchableObjectInt(ConfigHandler.MiscellaneousConfig.BoatId);
     }
 
     @SideOnly(Side.CLIENT)

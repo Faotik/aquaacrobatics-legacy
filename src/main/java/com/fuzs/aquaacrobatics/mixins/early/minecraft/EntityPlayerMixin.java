@@ -31,6 +31,9 @@ import com.google.common.collect.ImmutableMap;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+import static com.fuzs.aquaacrobatics.config.ConfigHandler.MiscellaneousConfig.CrawlingId;
+import static com.fuzs.aquaacrobatics.config.ConfigHandler.MiscellaneousConfig.poseId;
+
 @SuppressWarnings({ "unused", "ConstantConditions" })
 @Mixin(EntityPlayer.class)
 public abstract class EntityPlayerMixin extends EntityLivingBase implements IPlayerResizeable {
@@ -38,8 +41,8 @@ public abstract class EntityPlayerMixin extends EntityLivingBase implements IPla
     private static final EntitySize STANDING_SIZE = EntitySize.flexible(0.6F, 1.8F, 1.62F);
     private static final Map<Pose, EntitySize> SIZE_BY_POSE = ImmutableMap.<Pose, EntitySize>builder().put(Pose.STANDING, STANDING_SIZE).put(Pose.SLEEPING, EntitySize.fixed(0.2F, 0.2F, 0.2F)).put(Pose.FALL_FLYING, EntitySize.flexible(0.6F, 0.6F, 0.2F)).put(Pose.SWIMMING, EntitySize.flexible(0.6F, 0.6F, 0.2F)).put(Pose.SPIN_ATTACK, EntitySize.flexible(0.6F, 0.6F, 0.2F)).put(Pose.CROUCHING, EntitySize.flexible(0.6F, 1.5F, 1.62F)).put(Pose.DYING, EntitySize.fixed(0.2F, 0.2F, 0.1F)).build();
 
-    private static final int poseId = 30;
-    private static final int toggleCrawlingId = 31;
+
+
     @Shadow
     public PlayerCapabilities capabilities;
     @Shadow
@@ -74,7 +77,7 @@ public abstract class EntityPlayerMixin extends EntityLivingBase implements IPla
         this.playerEyeHeight = this.getEyeHeight(Pose.STANDING, this.size);
         this.getDataWatcher().addObject(poseId, Pose.STANDING.ordinal());
         if (ConfigHandler.MovementConfig.enableToggleCrawling) {
-            this.getDataWatcher().addObject(toggleCrawlingId, 0);
+            this.getDataWatcher().addObject(CrawlingId, 0);
         }
     }
 
@@ -131,14 +134,14 @@ public abstract class EntityPlayerMixin extends EntityLivingBase implements IPla
 
     @Override
     public boolean isForcingCrawling() {
-        return this.canForceCrawling() && this.getDataWatcher().getWatchableObjectInt(toggleCrawlingId) == 1;
+        return this.canForceCrawling() && this.getDataWatcher().getWatchableObjectInt(CrawlingId) == 1;
     }
 
     @Override
     public void setForcingCrawling(boolean flag) {
         if (!this.canForceCrawling())
             return;
-        this.getDataWatcher().updateObject(toggleCrawlingId, flag ? 1 : 0);
+        this.getDataWatcher().updateObject(CrawlingId, flag ? 1 : 0);
     }
 
     @Override

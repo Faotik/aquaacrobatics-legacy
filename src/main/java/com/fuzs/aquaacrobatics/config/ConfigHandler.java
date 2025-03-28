@@ -59,11 +59,11 @@ public class ConfigHandler {
 
         @Config.Name("Enable Crawling")
         @Config.Comment("Enables crawling to prevent suffocation. Note that if you disable this there will probably be behavioral differences from 1.13.")
-        public static boolean enableCrawling = true;
+        public static boolean enableCrawling = false;
 
         @Config.Name("Enable Toggle Crawling")
         @Config.Comment("Enables a keybind to toggle crawling.")
-        public static boolean enableToggleCrawling = true;
+        public static boolean enableToggleCrawling = false;
 
         @Config.Name("New Projectile Behavior")
         @Config.Comment("Modify projectile behavior to be closer to that of newer versions (fixes MC-73884 and allows bubble columns to work with ender pearls).")
@@ -124,6 +124,19 @@ public class ConfigHandler {
         @Config.Name("Floating Items")
         @Config.Comment("Whether or not items should float in water like in 1.13+.")
         public static boolean floatingItems = true;
+
+        @Config.Name("Boat ID")
+        @Config.Comment("Change the Boat datawatchers ID.")
+        public static int BoatId = 29;
+
+        @Config.Name("Pose ID")
+        @Config.Comment("Change the pose datawatchers ID.")
+        public static int poseId = 30;
+
+        @Config.Name("Crawling ID")
+        @Config.Comment("Change the Crawling datawatchers ID.")
+        public static int CrawlingId = 31;
+
     }
 
     public static class IntegrationConfig {
@@ -136,39 +149,6 @@ public class ConfigHandler {
         @Config.RequiresMcRestart
         public static boolean ae2Integration = true;
 
-        @Config.Name("Betweenlands Integration")
-        // @Config.Comment(COMPAT_DESCRIPTION)
-        @Config.RequiresMcRestart
-        public static boolean betweenlandsIntegration = true;
-
-        @Config.Name("Chiseled Me Integration")
-        // @Config.Comment(COMPAT_DESCRIPTION)
-        @Config.RequiresMcRestart
-        public static boolean chiseledMeIntegration = true;
-
-        @Config.Name("Ender IO Integration")
-        // @Config.Comment(COMPAT_DESCRIPTION)
-        @Config.RequiresMcRestart
-        public static boolean enderIoIntegration = true;
-
-        @Config.Name("Random Patches Integration")
-        // @Config.Comment(COMPAT_DESCRIPTION)
-        public static boolean randomPatchesIntegration = true;
-
-        @Config.Name("Mo' Bends Integration")
-        // @Config.Comment(COMPAT_DESCRIPTION)
-        @Config.RequiresMcRestart
-        public static boolean moBendsIntegration = true;
-
-        @Config.Name("Wings Integration")
-        // @Config.Comment(COMPAT_DESCRIPTION)
-        public static boolean wingsIntegration = true;
-
-        @Config.Name("ArtemisLib Integration")
-        // @Config.Comment(COMPAT_DESCRIPTION)
-        @Config.RequiresMcRestart
-        public static boolean artemisLibIntegration = true;
-
         @Config.Name("Morph Integration")
         // @Config.Comment(COMPAT_DESCRIPTION)
         public static boolean morphIntegration = true;
@@ -177,19 +157,6 @@ public class ConfigHandler {
         // @Config.Comment(COMPAT_DESCRIPTION)
         @Config.RequiresMcRestart
         public static boolean hatsIntegration = true;
-
-        @Config.Name("Thaumic Augmentation Integration")
-        // @Config.Comment(COMPAT_DESCRIPTION)
-        public static boolean thaumicAugmentationIntegration = true;
-
-        @Config.Name("Trinkets and Baubles Integration")
-        // @Config.Comment(COMPAT_DESCRIPTION)
-        public static boolean trinketsAndBaublesIntegration = true;
-
-        @Config.Name("Witchery: Resurrected Integration")
-        // @Config.Comment(COMPAT_DESCRIPTION)
-        public static boolean witcheryResurrectedIntegration = true;
-
     }
 
     @SuppressWarnings("unused")
