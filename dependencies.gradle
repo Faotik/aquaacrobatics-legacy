@@ -36,9 +36,8 @@
 dependencies {
     api("com.github.GTNewHorizons:GTNHLib:0.6.11:dev")
 
-    api("com.github.GTNewHorizons:Applied-Energistics-2-Unofficial:rv3-beta-554-GTNH:dev")
+    compileOnly("com.github.GTNewHorizons:Applied-Energistics-2-Unofficial:rv3-beta-554-GTNH:dev")
     compileOnly("com.github.GTNewHorizons:Galacticraft:3.3.5-GTNH:dev")
-
     compileOnly(rfg.deobf("curse.maven:witchery-69673:2234410"))
     compileOnly(rfg.deobf("curse.maven:hats-229073:2232170"))
     compileOnly(rfg.deobf("curse.maven:morph-229080:2338151"))
