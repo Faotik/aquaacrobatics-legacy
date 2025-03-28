@@ -12,6 +12,7 @@ import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MovementInput;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -112,58 +113,58 @@ public abstract class EntityPlayerSPMixin extends AbstractClientPlayer implement
         return false;
     }
 
-    @Inject(method = "func_145771_j", at = @At("HEAD"), cancellable = true)
-    protected void pushOutOfBlocks(double x, double y, double z, CallbackInfoReturnable<Boolean> callbackInfo) {
+//    @Inject(method = "func_145771_j", at = @At("HEAD"), cancellable = true)
+//    protected void pushOutOfBlocks(double x, double y, double z, CallbackInfoReturnable<Boolean> callbackInfo) {
+//
+//        if (ConfigHandler.playerBlockCollisions != ConfigHandler.PlayerBlockCollisions.EXACT) {
+//
+//            return;
+//        }
+//
+//        if (!this.noClip) {
+//
+//            this.setPlayerOffsetMotion(x, z);
+//        }
+//
+//        // return value is never used
+//        callbackInfo.setReturnValue(false);
+//    }
 
-        if (ConfigHandler.playerBlockCollisions != ConfigHandler.PlayerBlockCollisions.EXACT) {
-
-            return;
-        }
-
-        if (!this.noClip) {
-
-            this.setPlayerOffsetMotion(x, z);
-        }
-
-        // return value is never used
-        callbackInfo.setReturnValue(false);
-    }
-
-    private void setPlayerOffsetMotion(double x, double z) {
-
-        BlockPos blockpos = new BlockPos(x, this.posY, z);
-        if (this.shouldBlockPushPlayer(blockpos)) {
-
-            double d0 = x - blockpos.getX();
-            double d1 = z - blockpos.getZ();
-            ForgeDirection direction = null;
-            double d2 = Double.MAX_VALUE;
-            ForgeDirection[] xzPlane = new ForgeDirection[] { ForgeDirection.WEST, ForgeDirection.EAST,
-                ForgeDirection.NORTH, ForgeDirection.SOUTH };
-
-            for (ForgeDirection direction1 : xzPlane) {
-
-                double d3 = (direction1 == ForgeDirection.WEST || direction1 == ForgeDirection.EAST) ? d0
-                    : (direction1 == ForgeDirection.NORTH || direction1 == ForgeDirection.SOUTH) ? d1 : 0.0;
-                double d4 = (direction1 == ForgeDirection.EAST || direction1 == ForgeDirection.SOUTH) ? 1.0 - d3 : d3;
-                if (d4 < d2 && !this.shouldBlockPushPlayer(blockpos.offset(direction1))) {
-
-                    d2 = d4;
-                    direction = direction1;
-                }
-            }
-
-            if (direction != null) {
-
-                if (direction == ForgeDirection.WEST || direction == ForgeDirection.EAST) {
-
-                    this.motionX = 0.1 * (direction == ForgeDirection.EAST ? 1 : -1);
-                } else {
-                    this.motionZ = 0.1 * (direction == ForgeDirection.SOUTH ? 1 : -1);
-                }
-            }
-        }
-    }
+//    private void setPlayerOffsetMotion(double x, double z) {
+//
+//        BlockPos blockpos = new BlockPos(x, this.posY, z);
+//        if (this.shouldBlockPushPlayer(blockpos)) {
+//
+//            double d0 = x - blockpos.getX();
+//            double d1 = z - blockpos.getZ();
+//            EnumFacing direction = null;
+//            double d2 = Double.MAX_VALUE;
+//            EnumFacing[] xzPlane = new EnumFacing[]{EnumFacing.WEST, EnumFacing.EAST, EnumFacing.NORTH, EnumFacing.SOUTH};
+//
+//            for (EnumFacing direction1 : xzPlane) {
+//
+//                EnumFacing.Axis axis = direction1.getAxis();
+//                double d3 = axis == EnumFacing.Axis.X ? d0 : axis == EnumFacing.Axis.Z ? d1 : 0.0;
+//                double d4 = direction1.getAxisDirection() == EnumFacing.AxisDirection.POSITIVE ? 1.0 - d3 : d3;
+//                if (d4 < d2 && !this.shouldBlockPushPlayer(blockpos.offset(direction1))) {
+//
+//                    d2 = d4;
+//                    direction = direction1;
+//                }
+//            }
+//
+//            if (direction != null) {
+//
+//                if (direction.getAxis() == EnumFacing.Axis.X) {
+//
+//                    this.motionX = 0.1 * direction.getDirectionVec().getX();
+//                } else {
+//
+//                    this.motionZ = 0.1 * direction.getDirectionVec().getZ();
+//                }
+//            }
+//        }
+//    }
 
     private boolean shouldBlockPushPlayer(BlockPos pos) {
 
@@ -186,17 +187,17 @@ public abstract class EntityPlayerSPMixin extends AbstractClientPlayer implement
         return StreamSupport.stream(new AxisAlignedBBSpliterator(world, entity, aabb), false);
     }
 
-    @Redirect(method = "func_145771_j", at = @At(value = "INVOKE", target = "java/lang/Math.round(F)I"))
-    private int round(float a) {
-
-        if (ConfigHandler.playerBlockCollisions == ConfigHandler.PlayerBlockCollisions.APPROXIMATE) {
-
-            a -= 0.65;
-        }
-
-        // make the player be able to sneak under full cubes with their new height of 1.5 blocks
-        return Math.round(a);
-    }
+//    @Redirect(method = "func_145771_j", at = @At(value = "INVOKE", target = "java/lang/Math.round(F)I"))
+//    private int round(float a) {
+//
+//        if (ConfigHandler.playerBlockCollisions == ConfigHandler.PlayerBlockCollisions.APPROXIMATE) {
+//
+//            a -= 0.65;
+//        }
+//
+//        // make the player be able to sneak under full cubes with their new height of 1.5 blocks
+//        return Math.round(a);
+//    }
 
     @Inject(method = "onLivingUpdate", at = @At("HEAD"))
     public void onLivingUpdatePre(CallbackInfo callbackInfo) {
