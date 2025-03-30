@@ -100,8 +100,8 @@ public abstract class EntityPlayerMixin extends EntityLivingBase implements IPla
 
         super.onEntityUpdate();
         if (this.isInWater()) {
-//             int i = (IntegrationManager.isEFREnabled() && SpectatorMode.isSpectator(this.getPlayer())) ? 10 : 1;
-            this.timeUnderwater = MathHelper.clamp_float(this.timeUnderwater + 1, 0, 600);
+             int i = EFRIntegration.isSpectator(this.getPlayer()) ? 10 : 1;
+            this.timeUnderwater = MathHelper.clamp_float(this.timeUnderwater + i, 0, 600);
         } else if (this.timeUnderwater > 0) {
             this.timeUnderwater = MathHelper.clamp_float(this.timeUnderwater - 10, 0, 600);
         }
