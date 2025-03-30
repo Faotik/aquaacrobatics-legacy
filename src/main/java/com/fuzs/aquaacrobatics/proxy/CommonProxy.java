@@ -13,8 +13,6 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
 @EventBusSubscriber
 public class CommonProxy {
-    // @GameRegistry.ObjectHolder("aquaacrobatics:bubble_column")
-    // public static BlockBubbleColumn BUBBLE_COLUMN;
 
     private boolean needNetworking() {
         return ConfigHandler.MovementConfig.enableToggleCrawling;
@@ -35,12 +33,6 @@ public class CommonProxy {
 
     }
 
-    // @SubscribeEvent
-    // public static void registerBlocks(RegistryEvent.Register<Block> event) {
-    // if(ConfigHandler.MiscellaneousConfig.bubbleColumns)
-    // event.getRegistry().register(new BlockBubbleColumn());
-    // }
-
     public void onPostInit() {
 
         if (IntegrationManager.isHatsEnabled()) {
@@ -51,8 +43,8 @@ public class CommonProxy {
         BiomeWaterFogColors.recomputeColors();
         // This code will print a warning if we don't have a color mapping for the biome
         /*
-         * for(Biome biome : Biome.REGISTRY) {
-         * biome.getWaterColor();
+         * for(BiomeGenBase biome : BiomeGenBase.getBiomeGenArray()) {
+         *  biome.getWaterColorMultiplier();
          * }
          */
     }

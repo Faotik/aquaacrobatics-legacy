@@ -10,6 +10,7 @@ public class IntegrationManager {
     private static boolean isMorphLoaded;
     private static boolean isHatsLoaded;
     private static boolean isAE2Loaded;
+    private static boolean isEFRLoaded;
 
     public static List<IElytraOpenHook> elytraOpenHooks = new LinkedList<>();
 
@@ -17,6 +18,7 @@ public class IntegrationManager {
         isAE2Loaded = Loader.isModLoaded("appliedenergistics2");
         isMorphLoaded = Loader.isModLoaded("Morph");
         isHatsLoaded = Loader.isModLoaded("Hats");
+        isEFRLoaded = Loader.isModLoaded("etfuturum");
     }
 
     public static boolean isAE2Enabled() {
@@ -32,6 +34,11 @@ public class IntegrationManager {
     public static boolean isHatsEnabled() {
 
         return isHatsLoaded && ConfigHandler.IntegrationConfig.hatsIntegration;
+    }
+
+    public static boolean isEFREnabled() {
+
+        return isEFRLoaded && ConfigHandler.IntegrationConfig.efrIntegration;
     }
 
 }

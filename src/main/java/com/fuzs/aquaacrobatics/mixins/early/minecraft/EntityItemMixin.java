@@ -23,8 +23,6 @@ import com.fuzs.aquaacrobatics.util.BlockPos;
 @Mixin(EntityItem.class)
 public abstract class EntityItemMixin extends Entity {
 
-    @Shadow
-    public abstract ItemStack getEntityItem();
 
     public EntityItemMixin(World p_i1582_1_) {
         super(p_i1582_1_);
@@ -59,7 +57,7 @@ public abstract class EntityItemMixin extends Entity {
         Block state = this.worldObj.getBlock(eyeBlockPos.getX(), eyeBlockPos.getY(), eyeBlockPos.getZ());
         int metadata = this.worldObj.getBlockMetadata(eyeBlockPos.getX(), eyeBlockPos.getY(), eyeBlockPos.getZ());
         if (state.getMaterial() == Material.water && state instanceof BlockLiquid) {
-            float thresholdHeight = eyeBlockPos.getY() + getBlockLiquidHeight(state, this.worldObj, eyeBlockPos, metadata) + (1f / 9f);
+            float thresholdHeight = eyeBlockPos.getY() + getBlockLiquidHeight(state, metadata) + (1f / 9f);
             if (eyePosition < thresholdHeight) {
                 applyFloatMotion();
                 return 0.03999999910593033D;
@@ -68,7 +66,7 @@ public abstract class EntityItemMixin extends Entity {
         return entityItem.motionY;
     }
 
-    private static float getBlockLiquidHeight(Block block, IBlockAccess worldIn, BlockPos pos, int level) {
+    private static float getBlockLiquidHeight(Block block, int level) {
         return block instanceof BlockLiquid ? BlockLiquid.getLiquidHeightPercent(level) : 1.0F;
     }
 }

@@ -45,21 +45,16 @@ public class PacketSendKey implements IMessage {
             // your 'handle' code is run on the main Minecraft thread. 'onMessage' itself
             // is called on the networking thread so it is not safe to do a lot of things
             // here.
-            // FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> handle(message, ctx));
+            return handle(message, ctx);
+        }
+
+        private IMessage handle(PacketSendKey message, MessageContext ctx) {
             EntityPlayerMP playerEntity = ctx.getServerHandler().playerEntity;
-            if (message.keybind == KeybindPacket.TOGGLE_CRAWLING) {
-                IPlayerResizeable resizeable = (IPlayerResizeable) playerEntity;
-                resizeable.setForcingCrawling(resizeable.isForcingCrawling());
+            if(message.keybind == KeybindPacket.TOGGLE_CRAWLING) {
+                IPlayerResizeable resizeable = (IPlayerResizeable)playerEntity;
+                resizeable.setForcingCrawling(!resizeable.isForcingCrawling());
             }
             return null;
         }
-
-//        private void handle(PacketSendKey message, MessageContext ctx) {
-//            EntityPlayerMP playerEntity = ctx.getServerHandler().playerEntity;
-//            if(message.keybind == KeybindPacket.TOGGLE_CRAWLING) {
-//                IPlayerResizeable resizeable = (IPlayerResizeable)playerEntity;
-//                resizeable.setForcingCrawling(!resizeable.isForcingCrawling());
-//            }
-//        }
     }
 }

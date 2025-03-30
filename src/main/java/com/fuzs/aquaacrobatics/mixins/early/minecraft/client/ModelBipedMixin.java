@@ -1,6 +1,8 @@
 package com.fuzs.aquaacrobatics.mixins.early.minecraft.client;
 
 import javax.annotation.Nonnull;
+
+import com.fuzs.aquaacrobatics.integration.efr.EFRIntegration;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelRenderer;
@@ -48,9 +50,9 @@ public abstract class ModelBipedMixin extends ModelBase implements IModelBipedSw
 
         if (entityIn instanceof IPlayerResizeable) {
 
-            // boolean flag = ((EntityLivingBase) entityIn).getTicksElytraFlying() > 4;
+            boolean flag = EFRIntegration.getTicksElytraFlying((EntityPlayer) entityIn) > 4;
             boolean flag1 = ((IPlayerResizeable) entityIn).isActuallySwimming();
-            if (this.swimAnimation > 0.0F) {
+            if (!flag && this.swimAnimation > 0.0F) {
 
                 if (flag1) {
 

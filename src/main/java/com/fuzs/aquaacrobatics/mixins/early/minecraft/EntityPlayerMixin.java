@@ -2,6 +2,9 @@ package com.fuzs.aquaacrobatics.mixins.early.minecraft;
 
 import java.util.Map;
 import javax.annotation.Nonnull;
+
+import com.fuzs.aquaacrobatics.integration.efr.EFRIntegration;
+import ganymedes01.etfuturum.configuration.configs.ConfigFunctions;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
@@ -97,7 +100,7 @@ public abstract class EntityPlayerMixin extends EntityLivingBase implements IPla
 
         super.onEntityUpdate();
         if (this.isInWater()) {
-            // int i = this.isSpectator() ? 10 : 1;
+//             int i = (IntegrationManager.isEFREnabled() && SpectatorMode.isSpectator(this.getPlayer())) ? 10 : 1;
             this.timeUnderwater = MathHelper.clamp_float(this.timeUnderwater + 1, 0, 600);
         } else if (this.timeUnderwater > 0) {
             this.timeUnderwater = MathHelper.clamp_float(this.timeUnderwater - 10, 0, 600);
@@ -315,6 +318,7 @@ public abstract class EntityPlayerMixin extends EntityLivingBase implements IPla
     public void preparePlayerToSpawn() {
 
         // need to overwrite whole method due to this being client exclusive
+        this.yOffset = 1.62F;
         this.setPose(Pose.STANDING);
         super.preparePlayerToSpawn();
         this.setHealth(this.getMaxHealth());
@@ -346,11 +350,11 @@ public abstract class EntityPlayerMixin extends EntityLivingBase implements IPla
             this.setPose(Pose.SLEEPING);
         } else if (this.isPoseClear(Pose.SWIMMING)) {
             Pose pose;
-            // if (IntegrationManager.isWingsEnabled()) ? WingsIntegration.onFlightCheck(this.getPlayer(),this.isElytraFlying()) : this.isElytraFlying()) {
-            //
-            // pose = Pose.FALL_FLYING;
-            // } else
-            if (this.isForcingCrawling() || this.isSwimming()) {
+             if (EFRIntegration.isElytraFlying(this.getPlayer())) {
+
+             pose = Pose.FALL_FLYING;
+             } else if (this.isForcingCrawling() || this.isSwimming()) {
+
                 pose = Pose.SWIMMING;
                 this.setSize(0.6F, 0.6F); // need to fit in a 1 block gab
                 // otherwise unable to sneak on client when there is not enough space for the pose, but actual player size is smaller
@@ -407,14 +411,14 @@ public abstract class EntityPlayerMixin extends EntityLivingBase implements IPla
 
     @Override
     public boolean isSwimming() {
-        return !this.capabilities.isFlying && this.getFlag(6);
+        return !this.capabilities.isFlying && this.getFlag(6) && !EFRIntegration.isSpectator(this.getPlayer());
     }
 
     @Override
     public boolean isActuallySwimming() {
 
         boolean isFallFlying = this.getPose() == Pose.FALL_FLYING;
-        return this.getPose() == Pose.SWIMMING;// || (IntegrationManager.isWingsEnabled() ? !WingsIntegration.onFlightCheck(this.getPlayer(), !isFallFlying) :isFallFlying);
+        return this.getPose() == Pose.SWIMMING || isFallFlying;
     }
 
     @SideOnly(Side.CLIENT)
@@ -480,8 +484,7 @@ public abstract class EntityPlayerMixin extends EntityLivingBase implements IPla
             if (this.isClientWorld()) {
 
                 double d8 = this.posY;
-                float f5 = this.isSprinting() ? 0.9F : 0.8F; // this.getWaterSlowDown()
-                // float f5 = 0.9F; //this.getWaterSlowDown()
+                float f5 = this.isSprinting() ? 0.9F : 0.8F;
                 float f6 = 0.02F;
                 float f7 = 1; // (float) EnchantmentHelper.getDepthStriderModifier(this);
                 if (f7 > 3.0F) {
@@ -527,7 +530,9 @@ public abstract class EntityPlayerMixin extends EntityLivingBase implements IPla
             this.motionY = d3 * 0.6D;
             this.jumpMovementFactor = f;
             this.fallDistance = 0.0F;
-            // this.setFlag(7, false);
+            if (IntegrationManager.isEFREnabled()){
+                this.setFlag(EFRIntegration.elytraDataWatcherFlag(), false);
+            }
         }
         this.addMovementStat(this.posX - d0, this.posY - d1, this.posZ - d2);
         callbackInfo.cancel();
@@ -618,8 +623,8 @@ public abstract class EntityPlayerMixin extends EntityLivingBase implements IPla
     @SideOnly(Side.CLIENT)
     @Override
     public Vec3 getPosition(float p_70666_1_) {
-        if (isSwimming())// We add the 0.4F here to make it more accurate for the camera position
-        {
+        if (isSwimming())
+        {   // We add the 0.4F here to make it more accurate for the camera position
             return Vec3.createVectorHelper(this.posX, this.posY + 0.4F, this.posZ);
         }
         return super.getPosition(p_70666_1_);

@@ -157,6 +157,11 @@ public class ConfigHandler {
         // @Config.Comment(COMPAT_DESCRIPTION)
         @Config.RequiresMcRestart
         public static boolean hatsIntegration = true;
+
+        @Config.Name("EFR Integration")
+        // @Config.Comment(COMPAT_DESCRIPTION)
+        @Config.RequiresMcRestart
+        public static boolean efrIntegration = true;
     }
 
     @SuppressWarnings("unused")

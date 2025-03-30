@@ -62,12 +62,6 @@ public class ClientProxy extends CommonProxy {
         }
     }
 
-    // @SubscribeEvent
-    // public static void registerModels(ModelRegistryEvent event) {
-    // if(ConfigHandler.MiscellaneousConfig.bubbleColumns)
-    // ModelLoader.setCustomStateMapper(CommonProxy.BUBBLE_COLUMN, new StateMap.Builder().ignore(BlockLiquid.LEVEL,
-    // BlockBubbleColumn.DRAG).build());
-    // }
 
     @SubscribeEvent
     public static void registerTextures(TextureStitchEvent.Pre event) {

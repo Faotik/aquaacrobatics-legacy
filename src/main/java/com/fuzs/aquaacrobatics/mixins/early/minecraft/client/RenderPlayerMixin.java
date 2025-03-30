@@ -1,5 +1,8 @@
 package com.fuzs.aquaacrobatics.mixins.early.minecraft.client;
 
+import com.fuzs.aquaacrobatics.integration.IntegrationManager;
+import com.fuzs.aquaacrobatics.integration.efr.EFRIntegration;
+import ganymedes01.etfuturum.elytra.IElytraPlayer;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelBiped;
@@ -35,18 +38,18 @@ public abstract class RenderPlayerMixin extends RendererLivingEntity {
     @Inject(method = "rotateCorpse(Lnet/minecraft/client/entity/AbstractClientPlayer;FFF)V", at = @At("TAIL"))
     protected void applyRotations(AbstractClientPlayer entityLiving, float p_77043_2_, float rotationYaw, float partialTicks, CallbackInfo callbackInfo) {
 
-        // if (!entityLiving.isElytraFlying()) {
+        if (!EFRIntegration.isElytraFlying(entityLiving)) {
 
-        float f = ((IPlayerResizeable) entityLiving).getSwimAnimation(partialTicks);
-        float f3 = entityLiving.isInWater() ? -90.0F - entityLiving.rotationPitch : -90.0F;
-        float f4 = MathHelperNew.lerp(f, 0.0F, f3);
-        GL11.glRotatef(f4, 1.0F, 0.0F, 0.0F);
+            float f = ((IPlayerResizeable) entityLiving).getSwimAnimation(partialTicks);
+            float f3 = entityLiving.isInWater() ? -90.0F - entityLiving.rotationPitch : -90.0F;
+            float f4 = MathHelperNew.lerp(f, 0.0F, f3);
+            GL11.glRotatef(f4, 1.0F, 0.0F, 0.0F);
 
-        if (((IPlayerResizeable) entityLiving).isActuallySwimming()) {
-            GL11.glTranslatef(0.0F, -1.0F, 0.3F);
+            if (((IPlayerResizeable) entityLiving).isActuallySwimming()) {
+                GL11.glTranslatef(0.0F, -1.0F, 0.3F);
 
+            }
         }
-        // }
     }
 
 }
