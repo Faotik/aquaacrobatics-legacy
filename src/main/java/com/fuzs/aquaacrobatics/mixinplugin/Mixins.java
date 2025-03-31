@@ -43,6 +43,7 @@ public enum Mixins {
             "minecraft.client.ModelBipedMixin",
             "minecraft.client.RenderBoatMixin",
             "minecraft.client.RenderPlayerMixin",
+            "minecraft.client.ActiveRenderInfoMixin",
             "minecraft.client.PlayerControllerMPMixin")),
 
     BlockGrass(new Builder(" BlockGrass").addTargetedMod(TargetedMod.VANILLA)
