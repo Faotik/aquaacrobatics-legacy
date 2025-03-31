@@ -39,7 +39,6 @@ dependencies {
     compileOnly("com.github.GTNewHorizons:Applied-Energistics-2-Unofficial:rv3-beta-561-GTNH:dev")
     compileOnly("com.github.GTNewHorizons:Galacticraft:3.3.5-GTNH:dev")
     compileOnly rfg.deobf('curse.maven:et-futurum-requiem-441392:5873837')
-    compileOnly(rfg.deobf("curse.maven:witchery-69673:2234410"))
     compileOnly(rfg.deobf("curse.maven:hats-229073:2232170"))
     compileOnly(rfg.deobf("curse.maven:morph-229080:2338151"))
 

@@ -1,5 +1,6 @@
 package com.fuzs.aquaacrobatics.mixins.early.minecraft;
 
+import com.fuzs.aquaacrobatics.entity.Pose;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockVine;
 import net.minecraft.entity.Entity;
@@ -50,7 +51,7 @@ public abstract class EntityMixin implements IBubbleColumnInteractable {
      */
     @ModifyConstant(method = "handleWaterMovement", constant = @Constant(doubleValue = -0.4000000059604645D))
     private double adjustWaterMovementY(double original) {
-        return -0.2500000059604645D;
+        return (this instanceof IPlayerResizeable && ((IPlayerResizeable) this).getPose() == Pose.SWIMMING) ? -0.2500000059604645D : original;
     }
 
     @Override
