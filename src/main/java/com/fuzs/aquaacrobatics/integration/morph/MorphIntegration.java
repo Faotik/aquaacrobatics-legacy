@@ -1,6 +1,7 @@
 package com.fuzs.aquaacrobatics.integration.morph;
 
 import net.minecraft.entity.player.EntityPlayer;
+
 import morph.api.Api;
 
 public class MorphIntegration {

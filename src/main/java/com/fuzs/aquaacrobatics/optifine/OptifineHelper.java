@@ -1,30 +1,36 @@
 package com.fuzs.aquaacrobatics.optifine;
 
-import com.fuzs.aquaacrobatics.AquaAcrobatics;
-
 import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
+import com.fuzs.aquaacrobatics.AquaAcrobatics;
+
 public class OptifineHelper {
+
     public static boolean isOFPresent;
 
     public static void init() {
         Class<?> reflectorMainClass;
         try {
             reflectorMainClass = Class.forName("net.optifine.reflect.Reflector");
-        } catch(ClassNotFoundException e) {
+        } catch (ClassNotFoundException e) {
             return;
         }
         AquaAcrobatics.LOGGER.info("OptiFine detected. Performing highly invasive tweaks to fix water issues.");
         try {
             Class<?> reflectorMethod = Class.forName("net.optifine.reflect.ReflectorMethod");
-            Object newReflectorMethod = reflectorMethod.getConstructor(Class.forName("net.optifine.reflect.ReflectorClass"), String.class).newInstance(reflectorMainClass.getDeclaredField("ForgeBiome").get(null), "aqua$waterColorMultiplier");
+            Object newReflectorMethod = reflectorMethod
+                .getConstructor(Class.forName("net.optifine.reflect.ReflectorClass"), String.class)
+                .newInstance(
+                    reflectorMainClass.getDeclaredField("ForgeBiome")
+                        .get(null),
+                    "aqua$waterColorMultiplier");
             Field biomeMethodField = reflectorMainClass.getDeclaredField("ForgeBiome_getWaterColorMultiplier");
             biomeMethodField.setAccessible(true);
             biomeMethodField.set(null, newReflectorMethod);
-        } catch(ReflectiveOperationException e) {
+        } catch (ReflectiveOperationException e) {
             AquaAcrobatics.LOGGER.error("An error occured while patching OptiFine", e);
             return;
         }
@@ -40,7 +46,8 @@ public class OptifineHelper {
             Class<?> blockAliasesClass = Class.forName("net.optifine.shaders.BlockAliases");
             Class<?> shadersClass = Class.forName("net.optifine.shaders.Shaders");
             Method getShaderPackMethod = shadersClass.getDeclaredMethod("getShaderPack");
-            Method updateMethod = blockAliasesClass.getDeclaredMethod("update", Class.forName("net.optifine.shaders.IShaderPack"));
+            Method updateMethod = blockAliasesClass
+                .getDeclaredMethod("update", Class.forName("net.optifine.shaders.IShaderPack"));
             updateMethod.invoke(null, getShaderPackMethod.invoke(null));
         } catch (Exception e) {
             AquaAcrobatics.LOGGER.error("Error reloading OptiFine block aliases", e);
@@ -55,10 +62,12 @@ public class OptifineHelper {
             return null;
         }
         try {
-            Field blockAliasIdField = blockAlias.getClass().getDeclaredField("blockAliasId");
+            Field blockAliasIdField = blockAlias.getClass()
+                .getDeclaredField("blockAliasId");
             blockAliasIdField.setAccessible(true);
             int blockAliasId = blockAliasIdField.getInt(blockAlias);
-            Field matchField = blockAlias.getClass().getDeclaredField("matchBlocks");
+            Field matchField = blockAlias.getClass()
+                .getDeclaredField("matchBlocks");
             matchField.setAccessible(true);
             Object matchArray = matchField.get(blockAlias);
             int numMatches = Array.getLength(matchArray);
@@ -71,13 +80,14 @@ public class OptifineHelper {
             Object newMatchArray = Array.newInstance(matchBlockClass, numMatches);
             for (int i = 0; i < numMatches; i++) {
                 Object match = Array.get(matchArray, i);
-                int[] metadatas = (int[])metadatasField.get(match);
+                int[] metadatas = (int[]) metadatasField.get(match);
                 Object newMatch = matchBlockConstructor.newInstance(mainId, metadatas);
                 Array.set(newMatchArray, i, newMatch);
             }
-            Constructor<?> blockAliasConstructor = blockAlias.getClass().getDeclaredConstructor(int.class, newMatchArray.getClass());
+            Constructor<?> blockAliasConstructor = blockAlias.getClass()
+                .getDeclaredConstructor(int.class, newMatchArray.getClass());
             return blockAliasConstructor.newInstance(blockAliasId, newMatchArray);
-        } catch(Exception e) {
+        } catch (Exception e) {
             AquaAcrobatics.LOGGER.error("An error occured while patching OptiFine", e);
             return blockAlias;
         }

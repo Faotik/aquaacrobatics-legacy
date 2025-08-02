@@ -7,7 +7,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
+
 import com.fuzs.aquaacrobatics.core.AquaAcrobaticsCore;
+
 import cpw.mods.fml.relauncher.FMLLaunchHandler;
 
 public enum Mixins {
@@ -23,7 +25,6 @@ public enum Mixins {
             "minecraft.EntityMixin",
             "minecraft.EntityLivingBaseMixin",
             "minecraft.EntityThrowableMixin",
-            // "minecraft.NetHandlerPlayServerMixin",
             "minecraft.BiomeMixin",
             "minecraft.BlockLiquidMixin",
             // "minecraft.BlockMagmaMixin",
@@ -35,7 +36,6 @@ public enum Mixins {
         .setSide(Side.CLIENT)
         .setPhase(Phase.EARLY)
         .addMixinClasses(
-            "minecraft.client.BlockLiquidMixin",
             "minecraft.client.EntityPlayerSPMixin",
             "minecraft.client.EntityClientPlayerMPMixin",
             "minecraft.client.EntityRendererMixin",
@@ -43,7 +43,7 @@ public enum Mixins {
             "minecraft.client.ModelBipedMixin",
             "minecraft.client.RenderBoatMixin",
             "minecraft.client.RenderPlayerMixin",
-            "minecraft.client.ActiveRenderInfoMixin",
+            "minecraft.client.EntityOtherPlayerMPMixin",
             "minecraft.client.PlayerControllerMPMixin")),
 
     BlockGrass(new Builder(" BlockGrass").addTargetedMod(TargetedMod.VANILLA)

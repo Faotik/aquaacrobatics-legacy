@@ -4,6 +4,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -35,7 +36,8 @@ public class ParticleCurrentDown extends EntityFX {
         this.motionX *= 0.07D;
         this.motionZ *= 0.07D;
         this.moveEntity(this.motionX, this.motionY, this.motionZ);
-        if (this.worldObj.getBlock((int) this.posX, (int) this.posY, (int) this.posZ).getMaterial() != Material.water) {
+        if (this.worldObj.getBlock((int) this.posX, (int) this.posY, (int) this.posZ)
+            .getMaterial() != Material.water) {
             this.setDead();
         }
 

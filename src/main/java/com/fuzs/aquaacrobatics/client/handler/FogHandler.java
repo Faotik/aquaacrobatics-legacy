@@ -2,6 +2,7 @@ package com.fuzs.aquaacrobatics.client.handler;
 
 import java.util.Arrays;
 import java.util.HashSet;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
@@ -14,11 +15,14 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.common.BiomeDictionary;
+
 import org.lwjgl.opengl.GL11;
+
 import com.fuzs.aquaacrobatics.biome.BiomeWaterFogColors;
 import com.fuzs.aquaacrobatics.config.ConfigHandler;
 import com.fuzs.aquaacrobatics.entity.player.IPlayerResizeable;
 import com.fuzs.aquaacrobatics.util.math.MathHelperNew;
+
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
@@ -41,9 +45,10 @@ public class FogHandler {
     }
 
     private boolean shouldSkipFogOverride(World world) {
-        if (!ConfigHandler.BlocksConfig.newWaterFog)
-            return true;
-        return worldProviderClassNames.contains(world.provider.getClass().getName());
+        if (!ConfigHandler.BlocksConfig.newWaterFog) return true;
+        return worldProviderClassNames.contains(
+            world.provider.getClass()
+                .getName());
     }
 
     // @SubscribeEvent
@@ -87,10 +92,10 @@ public class FogHandler {
     /* LOW to override mods like Biomes O' Plenty which force their own underwater fog color */
     @SubscribeEvent(priority = EventPriority.LOW)
     public void onRenderFogColor(EntityViewRenderEvent.FogColors event) {
-        if (!ConfigHandler.BlocksConfig.newWaterColors)
-            return;
+        if (!ConfigHandler.BlocksConfig.newWaterColors) return;
         Block blockInside = event.block;
-        if ((event.block.getMaterial() == Material.water) && event.entity instanceof EntityPlayer && !shouldSkipFogOverride(event.entity.worldObj)) {
+        if ((event.block.getMaterial() == Material.water) && event.entity instanceof EntityPlayer
+            && !shouldSkipFogOverride(event.entity.worldObj)) {
             float fogRed, fogGreen, fogBlue;
             EntityPlayer playerEntity = (EntityPlayer) event.entity;
             long i = System.nanoTime() / 1000000L;
@@ -116,7 +121,8 @@ public class FogHandler {
             fogBlue = f3 / 255.0F;
             if (targetFogColor != j) {
                 targetFogColor = j;
-                prevFogColor = MathHelper.floor_float(f1) << 16 | MathHelper.floor_float(f2) << 8 | MathHelper.floor_float(f3);
+                prevFogColor = MathHelper.floor_float(f1) << 16 | MathHelper.floor_float(f2) << 8
+                    | MathHelper.floor_float(f3);
                 fogAdjustTime = i;
             }
             float f6 = ((IPlayerResizeable) playerEntity).getWaterVision();
@@ -127,7 +133,8 @@ public class FogHandler {
 
             double blindnessFactor = 1.0;
             if (playerEntity.isPotionActive(Potion.blindness)) {
-                int potionDuration = playerEntity.getActivePotionEffect(Potion.blindness).getDuration();
+                int potionDuration = playerEntity.getActivePotionEffect(Potion.blindness)
+                    .getDuration();
                 if (potionDuration < 20) {
                     blindnessFactor *= (1.0F - (float) i / 20.0F);
                 } else {

@@ -5,9 +5,9 @@ import static net.minecraft.entity.SharedMonsterAttributes.movementSpeed;
 import java.util.Objects;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
+
 import javax.annotation.Nullable;
 
-import com.fuzs.aquaacrobatics.integration.efr.EFRIntegration;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -17,6 +17,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovementInput;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -24,10 +25,12 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
 import com.fuzs.aquaacrobatics.client.entity.IPlayerSPSwimming;
 import com.fuzs.aquaacrobatics.config.ConfigHandler;
 import com.fuzs.aquaacrobatics.entity.Pose;
 import com.fuzs.aquaacrobatics.entity.player.IPlayerResizeable;
+import com.fuzs.aquaacrobatics.integration.efr.EFRIntegration;
 import com.fuzs.aquaacrobatics.util.BlockPos;
 import com.fuzs.aquaacrobatics.util.MovementInputStorage;
 import com.fuzs.aquaacrobatics.util.math.AxisAlignedBBSpliterator;
@@ -69,7 +72,9 @@ public abstract class EntityPlayerSPMixin extends AbstractClientPlayer implement
     @Override
     public boolean isForcedDown() {
 
-        return ((IPlayerResizeable) this).isResizingAllowed() && !this.capabilities.isFlying ? this.isSneaking() || ((IPlayerResizeable) this).isVisuallySwimming() : this.isActuallySneaking();
+        return ((IPlayerResizeable) this).isResizingAllowed() && !this.capabilities.isFlying
+            ? this.isSneaking() || ((IPlayerResizeable) this).isVisuallySwimming()
+            : this.isActuallySneaking();
     }
 
     @Override
@@ -133,35 +138,35 @@ public abstract class EntityPlayerSPMixin extends AbstractClientPlayer implement
 
     private void setPlayerOffsetMotion(double x, double z) {
 
-        BlockPos blockpos = new BlockPos(x, this.posY, z);
-        if (this.shouldBlockPushPlayer(blockpos)) {
+        int blockX = (int) Math.floor(x);
+        int blockZ = (int) Math.floor(z);
 
-            double d0 = x - blockpos.getX();
-            double d1 = z - blockpos.getZ();
+        if (this.shouldBlockPushPlayer(blockX, blockZ)) {
+
+            double d0 = x - blockX;
+            double d1 = z - blockZ;
             ForgeDirection direction = null;
-            double d2 = Double.MAX_VALUE;
-            ForgeDirection[] xzPlane = new ForgeDirection[]{ForgeDirection.WEST, ForgeDirection.EAST, ForgeDirection.NORTH, ForgeDirection.SOUTH};
+            double closest = Double.MAX_VALUE;
 
-            for (ForgeDirection direction1 : xzPlane) {
+            ForgeDirection[] xzPlane = new ForgeDirection[] { ForgeDirection.WEST, ForgeDirection.EAST,
+                ForgeDirection.NORTH, ForgeDirection.SOUTH };
 
-                double d3 = 0.0;
-                if (direction1 == ForgeDirection.EAST || direction1 == ForgeDirection.WEST) {
-                    d3 = d0;
-                } else if (direction1 == ForgeDirection.NORTH || direction1 == ForgeDirection.SOUTH) {
-                    d3 = d1;
-                }
-                double d4 = direction1.offsetX == 1 ? 1.0 - d3 : d3;
+            for (ForgeDirection dir : xzPlane) {
+                boolean isX = dir.offsetX != 0;
+                double d3 = isX ? d0 : d1;
+                double d4 = (dir.offsetX + dir.offsetZ > 0) ? (1.0 - d3) : d3;
 
-                if (d4 < d2 && !this.shouldBlockPushPlayer(blockpos.offset(direction1))) {
+                int offsetX = blockX + dir.offsetX;
+                int offsetZ = blockZ + dir.offsetZ;
 
-                    d2 = d4;
-                    direction = direction1;
+                if (d4 < closest && !this.shouldBlockPushPlayer(offsetX, offsetZ)) {
+                    closest = d4;
+                    direction = dir;
                 }
             }
 
             if (direction != null) {
-
-                if (direction == ForgeDirection.EAST || direction == ForgeDirection.WEST) {
+                if (direction.offsetX != 0) {
                     this.motionX = 0.1 * direction.offsetX;
                 } else {
                     this.motionZ = 0.1 * direction.offsetZ;
@@ -170,17 +175,32 @@ public abstract class EntityPlayerSPMixin extends AbstractClientPlayer implement
         }
     }
 
+    private boolean shouldBlockPushPlayer(int x, int z) {
+
+        double minY = this.boundingBox.minY;
+        double maxY = this.boundingBox.maxY;
+        AxisAlignedBB aabb = AxisAlignedBB.getBoundingBox(x, minY, z, x + 1.0, maxY, z + 1.0);
+
+        // don't use IBlockState#causesSuffocation as it works differently in newer versions
+        return !isAxisAlignedBBNotClear(this.worldObj, this, aabb.expand(-1.0E-7, -1.0E-7, -1.0E-7));
+    }
+
     private boolean shouldBlockPushPlayer(BlockPos pos) {
 
         double minY = this.boundingBox.minY;
         double maxY = this.boundingBox.maxY;
-        AxisAlignedBB aabb = AxisAlignedBB.getBoundingBox(pos.getX(), minY, pos.getZ(), pos.getX() + 1.0, maxY, pos.getZ() + 1.0);
+        AxisAlignedBB aabb = AxisAlignedBB
+            .getBoundingBox(pos.getX(), minY, pos.getZ(), pos.getX() + 1.0, maxY, pos.getZ() + 1.0);
 
         // don't use IBlockState#causesSuffocation as it works differently in newer versions
         return !isAxisAlignedBBNotClear(this.worldObj, this, aabb.expand(-1.0E-7, -1.0E-7, -1.0E-7));
     }
 
     private static boolean isAxisAlignedBBNotClear(World world, @Nullable Entity entity, AxisAlignedBB aabb) {
+        System.out.println(
+            "Checking AABB: " + aabb
+                + " for createAxisAlignedBBStream: "
+                + createAxisAlignedBBStream(world, entity, aabb).allMatch(Objects::isNull));
 
         return createAxisAlignedBBStream(world, entity, aabb).allMatch(Objects::isNull);
     }
@@ -235,16 +255,16 @@ public abstract class EntityPlayerSPMixin extends AbstractClientPlayer implement
 
     private boolean isStartingToFly() {
 
-         if (this.capabilities.allowFlying) {
+        if (this.capabilities.allowFlying) {
 
-             if (EFRIntegration.isSpectator(this)) {
+            if (EFRIntegration.isSpectator(this)) {
 
-                 return !this.capabilities.isFlying;
-             } else if (!this.movementInput.jump && this.mc.gameSettings.keyBindJump.getIsKeyPressed()) {
+                return !this.capabilities.isFlying;
+            } else if (!this.movementInput.jump && this.mc.gameSettings.keyBindJump.getIsKeyPressed()) {
 
-                 return this.flyToggleTimer != 0 && !((IPlayerResizeable) this).isSwimming();
-             }
-         }
+                return this.flyToggleTimer != 0 && !((IPlayerResizeable) this).isSwimming();
+            }
+        }
 
         return false;
     }
@@ -282,12 +302,13 @@ public abstract class EntityPlayerSPMixin extends AbstractClientPlayer implement
     }
 
     private boolean isCrouching(boolean cantStand) {
-        if ((!this.movementStorage.isFlying || !cantStand) && EFRIntegration.getTicksElytraFlying (this)  <= 4) {
+        if ((!this.movementStorage.isFlying || !cantStand) && EFRIntegration.getTicksElytraFlying(this) <= 4) {
             if (!((IPlayerResizeable) this).isSwimming() && (this.onGround || !this.isInWater())) {
 
                 if (!this.isOnLadder() && (((IPlayerResizeable) this).isPoseClear(Pose.CROUCHING) || this.noClip)) {
 
-                    return this.movementInput.sneak || ((IPlayerResizeable) this).isResizingAllowed() && !this.isPlayerSleeping() && cantStand;
+                    return this.movementInput.sneak
+                        || ((IPlayerResizeable) this).isResizingAllowed() && !this.isPlayerSleeping() && cantStand;
                 }
             }
         }
@@ -301,7 +322,12 @@ public abstract class EntityPlayerSPMixin extends AbstractClientPlayer implement
         boolean wasSwimming = this
             .isUsingSwimmingAnimation(this.movementStorage.moveForward, this.movementStorage.moveStrafe);
         boolean isSprintingEnvironment = this.onGround || this.canSwim() || this.movementStorage.isFlying;
-        if (isSprintingEnvironment && !wasSneaking && !wasSwimming && this.isUsingSwimmingAnimation() && !this.isSprinting() && isSaturated && !this.isPotionActive(Potion.blindness)) {
+        if (isSprintingEnvironment && !wasSneaking
+            && !wasSwimming
+            && this.isUsingSwimmingAnimation()
+            && !this.isSprinting()
+            && isSaturated
+            && !this.isPotionActive(Potion.blindness)) {
 
             if (this.movementStorage.sprintToggleTimer <= 0 && !this.mc.gameSettings.keyBindSprint.getIsKeyPressed()) {
 
@@ -312,7 +338,11 @@ public abstract class EntityPlayerSPMixin extends AbstractClientPlayer implement
             }
         }
 
-        if (!this.isSprinting() && (!this.isInWater() || this.canSwim()) && this.isUsingSwimmingAnimation() && isSaturated && !this.isPotionActive(Potion.blindness) && this.mc.gameSettings.keyBindSprint.getIsKeyPressed()) {
+        if (!this.isSprinting() && (!this.isInWater() || this.canSwim())
+            && this.isUsingSwimmingAnimation()
+            && isSaturated
+            && !this.isPotionActive(Potion.blindness)
+            && this.mc.gameSettings.keyBindSprint.getIsKeyPressed()) {
 
             this.setSprinting(true);
         }
@@ -322,7 +352,8 @@ public abstract class EntityPlayerSPMixin extends AbstractClientPlayer implement
 
         if (this.isSprinting()) {
 
-            boolean isNotMoving = !this.isMovingForward(this.movementInput.moveForward, this.movementInput.moveStrafe) || !isSaturated;
+            boolean isNotMoving = !this.isMovingForward(this.movementInput.moveForward, this.movementInput.moveStrafe)
+                || !isSaturated;
             // don't stop sprint flying when breaching water surface
             boolean hasCollided = isNotMoving || this.isInWater() && !this.canSwim() && !this.movementStorage.isFlying;
             if (((IPlayerResizeable) this).isSwimming()) {
@@ -340,21 +371,27 @@ public abstract class EntityPlayerSPMixin extends AbstractClientPlayer implement
 
     @Override
     public boolean canPerformElytraTakeoff() {
-        return (ConfigHandler.MovementConfig.easyElytraTakeoff && this.movementInput.jump && !this.movementStorage.isStartingToFly && !this.movementStorage.jump && this.motionY >= 0.0 && !this.capabilities.isFlying && !this.isRiding() && !this.isOnLadder());
+        return (ConfigHandler.MovementConfig.easyElytraTakeoff && this.movementInput.jump
+            && !this.movementStorage.isStartingToFly
+            && !this.movementStorage.jump
+            && this.motionY >= 0.0
+            && !this.capabilities.isFlying
+            && !this.isRiding()
+            && !this.isOnLadder());
     }
 
-//     private void handleElytraTakeoff() {
-//         // 1.15 change for easier elytra takeoff
-//         if (canPerformElytraTakeoff() && IntegrationManager.isEFREnabled()) {
-//
-//             ItemStack itemstack = this.getEquipmentInSlot(3);
-//             if (itemstack != null && itemstack.getItem() instanceof ItemArmorElytra) {
-//                 this.connection.sendPacket(new C0BPacketEntityAction(this, C0BPacketEntityAction.Action.START_FALL_FLYING));
-//             } else {
-//                 IntegrationManager.elytraOpenHooks.forEach(hook -> hook.openElytra((EntityPlayerSP) (Object) this));
-//             }
-//         }
-//     }
+    // private void handleElytraTakeoff() {
+    // // 1.15 change for easier elytra takeoff
+    // if (canPerformElytraTakeoff() && IntegrationManager.isEFREnabled()) {
+    //
+    // ItemStack itemstack = this.getEquipmentInSlot(3);
+    // if (itemstack != null && itemstack.getItem() instanceof ItemArmorElytra) {
+    // this.connection.sendPacket(new C0BPacketEntityAction(this, C0BPacketEntityAction.Action.START_FALL_FLYING));
+    // } else {
+    // IntegrationManager.elytraOpenHooks.forEach(hook -> hook.openElytra((EntityPlayerSP) (Object) this));
+    // }
+    // }
+    // }
 
     private void handleWaterSneaking() {
 
@@ -381,6 +418,7 @@ public abstract class EntityPlayerSPMixin extends AbstractClientPlayer implement
 
     protected void handleSneakWater() {
 
-        this.motionY -= 0.03999999910593033 * this.getEntityAttribute(movementSpeed).getAttributeValue();
+        this.motionY -= 0.03999999910593033 * this.getEntityAttribute(movementSpeed)
+            .getAttributeValue();
     }
 }

@@ -1,7 +1,9 @@
 package com.fuzs.aquaacrobatics.integration.hats;
 
 import net.minecraft.entity.EntityLivingBase;
+
 import com.fuzs.aquaacrobatics.entity.player.IPlayerResizeable;
+
 import hats.client.render.helper.HelperPlayer;
 import hats.common.core.ApiHandler;
 

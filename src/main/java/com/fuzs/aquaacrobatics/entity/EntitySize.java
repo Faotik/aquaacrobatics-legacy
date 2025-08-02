@@ -21,7 +21,9 @@ public class EntitySize {
 
     public EntitySize scale(float widthFactor, float heightFactor) {
 
-        return !this.fixed && (widthFactor != 1.0F || heightFactor != 1.0F) ? flexible(this.width * widthFactor, this.height * heightFactor) : this;
+        return !this.fixed && (widthFactor != 1.0F || heightFactor != 1.0F)
+            ? flexible(this.width * widthFactor, this.height * heightFactor)
+            : this;
     }
 
     public static EntitySize flexible(float widthIn, float heightIn) {

@@ -1,11 +1,13 @@
 package com.fuzs.aquaacrobatics.mixins.early.minecraft;
 
 import net.minecraft.world.biome.BiomeGenBase;
+
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
 import com.fuzs.aquaacrobatics.biome.BiomeWaterFogColors;
 import com.fuzs.aquaacrobatics.config.ConfigHandler;
 
@@ -27,7 +29,8 @@ public abstract class BiomeMixin {
     @Inject(method = "getWaterColorMultiplier", at = @At("TAIL"), remap = false, cancellable = true)
     private void forceNewColor(CallbackInfoReturnable<Integer> cir) {
         if (ConfigHandler.BlocksConfig.newWaterColors) {
-            cir.setReturnValue(BiomeWaterFogColors.getWaterColorForBiome((BiomeGenBase) (Object) this, cir.getReturnValue()));
+            cir.setReturnValue(
+                BiomeWaterFogColors.getWaterColorForBiome((BiomeGenBase) (Object) this, cir.getReturnValue()));
         }
     }
 }

@@ -2,18 +2,22 @@ package com.fuzs.aquaacrobatics.mixins.early.minecraft;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityBoat;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
 import com.fuzs.aquaacrobatics.config.ConfigHandler;
 import com.fuzs.aquaacrobatics.entity.IBubbleColumnInteractable;
 import com.fuzs.aquaacrobatics.entity.IRockableBoat;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -39,16 +43,35 @@ public abstract class EntityBoatMixin extends Entity implements IBubbleColumnInt
             }
         }
 
-        this.worldObj.spawnParticle("splash", this.posX + (double) this.rand.nextFloat(), this.posY + 0.7D, this.posZ + (double) this.rand.nextFloat(), 0.0D, 0.0D, 0.0D);
+        this.worldObj.spawnParticle(
+            "splash",
+            this.posX + (double) this.rand.nextFloat(),
+            this.posY + 0.7D,
+            this.posZ + (double) this.rand.nextFloat(),
+            0.0D,
+            0.0D,
+            0.0D);
         if (this.rand.nextInt(20) == 0) {
-            this.worldObj.playSound(this.posX, this.posY, this.posZ, this.getSplashSound(), 1.0F, 0.8F + 0.4F * this.rand.nextFloat(), false);
+            this.worldObj.playSound(
+                this.posX,
+                this.posY,
+                this.posZ,
+                this.getSplashSound(),
+                1.0F,
+                0.8F + 0.4F * this.rand.nextFloat(),
+                false);
         }
     }
 
     @Override
-    public void aqua$doRegisterData() {this.getDataWatcher().addObject(ConfigHandler.MiscellaneousConfig.BoatId, 0);}
+    public void aqua$doRegisterData() {
+        this.getDataWatcher()
+            .addObject(ConfigHandler.MiscellaneousConfig.BoatId, 0);
+    }
 
-    @Inject(method = "onUpdate", at = @At(value = "INVOKE", target = "net/minecraft/entity/item/EntityBoat.setRotation(FF)V", ordinal = 1))
+    @Inject(
+        method = "onUpdate",
+        at = @At(value = "INVOKE", target = "net/minecraft/entity/item/EntityBoat.setRotation(FF)V", ordinal = 1))
     private void updateRocking(CallbackInfo ci) {
         if (this.worldObj.isRemote) {
             int i = this.getRockingTicks();
@@ -60,7 +83,8 @@ public abstract class EntityBoatMixin extends Entity implements IBubbleColumnInt
 
             this.rockingIntensity = MathHelper.clamp_float(this.rockingIntensity, 0.0F, 1.0F);
             this.prevRockingAngle = this.rockingAngle;
-            this.rockingAngle = 10.0F * (float) Math.sin((double) (0.5F * (float) this.worldObj.getTotalWorldTime())) * this.rockingIntensity;
+            this.rockingAngle = 10.0F * (float) Math.sin((double) (0.5F * (float) this.worldObj.getTotalWorldTime()))
+                * this.rockingIntensity;
         } else {
             if (!this.aqua$rocking) {
                 this.setRockingTicks(0);
@@ -98,21 +122,18 @@ public abstract class EntityBoatMixin extends Entity implements IBubbleColumnInt
     }
 
     public void setRockingTicks(int p_203055_1_) {
-        if (!ConfigHandler.MiscellaneousConfig.bubbleColumns)
-            return;
+        if (!ConfigHandler.MiscellaneousConfig.bubbleColumns) return;
         this.dataWatcher.updateObject(ConfigHandler.MiscellaneousConfig.BoatId, p_203055_1_);
     }
 
     public int getRockingTicks() {
-        if (!ConfigHandler.MiscellaneousConfig.bubbleColumns)
-            return 0;
+        if (!ConfigHandler.MiscellaneousConfig.bubbleColumns) return 0;
         return this.dataWatcher.getWatchableObjectInt(ConfigHandler.MiscellaneousConfig.BoatId);
     }
 
     @SideOnly(Side.CLIENT)
     public float getRockingAngle(float partialTicks) {
-        if (!ConfigHandler.MiscellaneousConfig.bubbleColumns)
-            return 0.0f;
+        if (!ConfigHandler.MiscellaneousConfig.bubbleColumns) return 0.0f;
         return this.prevRockingAngle + (this.rockingAngle - this.prevRockingAngle) * partialTicks;
     }
 

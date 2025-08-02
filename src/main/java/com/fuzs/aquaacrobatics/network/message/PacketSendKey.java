@@ -1,7 +1,9 @@
 package com.fuzs.aquaacrobatics.network.message;
 
 import net.minecraft.entity.player.EntityPlayerMP;
+
 import com.fuzs.aquaacrobatics.entity.player.IPlayerResizeable;
+
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
@@ -19,10 +21,8 @@ public class PacketSendKey implements IMessage {
     @Override
     public void fromBytes(ByteBuf buf) {
         int idx = buf.readInt();
-        if (idx >= KeybindPacket.values().length)
-            keybind = KeybindPacket.UNKNOWN;
-        else
-            keybind = KeybindPacket.values()[idx];
+        if (idx >= KeybindPacket.values().length) keybind = KeybindPacket.UNKNOWN;
+        else keybind = KeybindPacket.values()[idx];
     }
 
     @Override
@@ -39,6 +39,7 @@ public class PacketSendKey implements IMessage {
     }
 
     public static class Handler implements IMessageHandler<PacketSendKey, IMessage> {
+
         @Override
         public IMessage onMessage(PacketSendKey message, MessageContext ctx) {
             // Always use a construct like this to actually handle your message. This ensures that
@@ -50,8 +51,8 @@ public class PacketSendKey implements IMessage {
 
         private IMessage handle(PacketSendKey message, MessageContext ctx) {
             EntityPlayerMP playerEntity = ctx.getServerHandler().playerEntity;
-            if(message.keybind == KeybindPacket.TOGGLE_CRAWLING) {
-                IPlayerResizeable resizeable = (IPlayerResizeable)playerEntity;
+            if (message.keybind == KeybindPacket.TOGGLE_CRAWLING) {
+                IPlayerResizeable resizeable = (IPlayerResizeable) playerEntity;
                 resizeable.setForcingCrawling(!resizeable.isForcingCrawling());
             }
             return null;

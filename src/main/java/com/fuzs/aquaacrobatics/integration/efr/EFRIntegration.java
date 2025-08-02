@@ -1,10 +1,12 @@
 package com.fuzs.aquaacrobatics.integration.efr;
 
+import net.minecraft.entity.player.EntityPlayer;
+
 import com.fuzs.aquaacrobatics.integration.IntegrationManager;
+
 import ganymedes01.etfuturum.configuration.configs.ConfigFunctions;
 import ganymedes01.etfuturum.elytra.IElytraPlayer;
 import ganymedes01.etfuturum.spectator.SpectatorMode;
-import net.minecraft.entity.player.EntityPlayer;
 
 public class EFRIntegration {
 

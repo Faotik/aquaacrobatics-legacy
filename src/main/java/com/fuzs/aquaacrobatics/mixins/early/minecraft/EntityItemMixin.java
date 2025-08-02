@@ -5,13 +5,12 @@ import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
+
 import com.fuzs.aquaacrobatics.config.ConfigHandler;
 import com.fuzs.aquaacrobatics.integration.IntegrationManager;
 import com.fuzs.aquaacrobatics.integration.ae2.AE2Integration;
@@ -22,7 +21,6 @@ import com.fuzs.aquaacrobatics.util.BlockPos;
  */
 @Mixin(EntityItem.class)
 public abstract class EntityItemMixin extends Entity {
-
 
     public EntityItemMixin(World p_i1582_1_) {
         super(p_i1582_1_);

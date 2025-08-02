@@ -1,11 +1,14 @@
-package com.fuzs.aquaacrobatics.client.model;
+package com.fuzs.aquaacrobatics.client.resource;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Set;
+
 import javax.annotation.Nonnull;
+
 import net.minecraft.client.resources.AbstractResourcePack;
+
 import com.fuzs.aquaacrobatics.AquaAcrobatics;
 import com.google.common.collect.ImmutableSet;
 
@@ -18,12 +21,14 @@ public class WaterResourcePack extends AbstractResourcePack {
         "assets/minecraft/textures/blocks/water_flow.png.mcmeta",
         "assets/minecraft/textures/blocks/water_overlay.png");
 
-    public WaterResourcePack(File resourcePackFileIn) {super(resourcePackFileIn);}
+    public WaterResourcePack(File resourcePackFileIn) {
+        super(resourcePackFileIn);
+    }
 
     @Override
     protected InputStream getInputStreamByName(String name) throws IOException {
-        if (name.equals("pack.mcmeta"))
-            return AquaAcrobatics.class.getResourceAsStream("/water_pack.mcmeta");
+        System.out.println("Loading resource: " + name);
+        if (name.equals("pack.mcmeta")) return AquaAcrobatics.class.getResourceAsStream("/water_pack.mcmeta");
         String truePath = "/" + name.replace("minecraft", "aquaacrobatics/overrides");
         return AquaAcrobatics.class.getResourceAsStream(truePath);
     }
@@ -34,7 +39,9 @@ public class WaterResourcePack extends AbstractResourcePack {
     }
 
     @Override
-    public Set<String> getResourceDomains() {return ImmutableSet.of("minecraft");}
+    public Set<String> getResourceDomains() {
+        return ImmutableSet.of("minecraft");
+    }
 
     @Nonnull
     @Override

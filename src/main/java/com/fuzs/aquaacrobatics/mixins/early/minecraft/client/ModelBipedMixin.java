@@ -2,7 +2,6 @@ package com.fuzs.aquaacrobatics.mixins.early.minecraft.client;
 
 import javax.annotation.Nonnull;
 
-import com.fuzs.aquaacrobatics.integration.efr.EFRIntegration;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelRenderer;
@@ -12,6 +11,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
+
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -19,9 +19,11 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
 import com.fuzs.aquaacrobatics.client.model.IModelBipedSwimming;
 import com.fuzs.aquaacrobatics.config.ConfigHandler;
 import com.fuzs.aquaacrobatics.entity.player.IPlayerResizeable;
+import com.fuzs.aquaacrobatics.integration.efr.EFRIntegration;
 import com.fuzs.aquaacrobatics.util.math.MathHelperNew;
 
 @SuppressWarnings("unused")
@@ -44,7 +46,11 @@ public abstract class ModelBipedMixin extends ModelBase implements IModelBipedSw
     @Unique
     public float swimAnimation;
 
-    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/ModelBiped;setRotationAngles(FFFFFFLnet/minecraft/entity/Entity;)V"))
+    @Redirect(
+        method = "render",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/client/model/ModelBiped;setRotationAngles(FFFFFFLnet/minecraft/entity/Entity;)V"))
     public void setRotationAngles(ModelBiped modelBiped, float limbSwing, float limbSwingAmount, float ageInTicks,
         float netHeadYaw, float headPitch, float scaleFactor, Entity entityIn) {
 
@@ -56,18 +62,26 @@ public abstract class ModelBipedMixin extends ModelBase implements IModelBipedSw
 
                 if (flag1) {
 
-                    headPitch = this.rotLerpRad(this.swimAnimation, this.bipedHead.rotateAngleX, ((float) -Math.PI / 4F)) / 0.017453292F;
+                    headPitch = this
+                        .rotLerpRad(this.swimAnimation, this.bipedHead.rotateAngleX, ((float) -Math.PI / 4F))
+                        / 0.017453292F;
                 } else {
 
-                    headPitch = this.rotLerpRad(this.swimAnimation, this.bipedHead.rotateAngleX, headPitch * ((float) Math.PI / 180F)) / 0.017453292F;
+                    headPitch = this.rotLerpRad(
+                        this.swimAnimation,
+                        this.bipedHead.rotateAngleX,
+                        headPitch * ((float) Math.PI / 180F)) / 0.017453292F;
                 }
             }
         }
 
-        modelBiped.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, entityIn);
+        modelBiped
+            .setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, entityIn);
     }
 
-    @Inject(method = "setRotationAngles", at = @At(value = "FIELD", target = "net/minecraft/client/model/ModelBiped.onGround:F", ordinal = 0))
+    @Inject(
+        method = "setRotationAngles",
+        at = @At(value = "FIELD", target = "net/minecraft/client/model/ModelBiped.onGround:F", ordinal = 0))
     public void setRotationAnglesPre(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw,
         float headPitch, float scaleFactor, Entity entityIn, CallbackInfo callbackInfo) {
 
@@ -77,10 +91,12 @@ public abstract class ModelBipedMixin extends ModelBase implements IModelBipedSw
         }
 
         EntityLivingBase livingEntityIn = (EntityLivingBase) entityIn;
-        if (livingEntityIn instanceof EntityPlayer player && player.getItemInUseCount() > 0) {
+        if (livingEntityIn instanceof EntityPlayer player && player.getHeldItem() != null
+            && player.getItemInUseCount() > 0) {
 
             ItemStack stack = livingEntityIn.getHeldItem();
-            if (stack.getItemUseAction() == EnumAction.eat || stack.getItemUseAction() == EnumAction.drink) {
+            if (stack != null && stack.getItemUseAction() == EnumAction.eat
+                || stack.getItemUseAction() == EnumAction.drink) {
 
                 float partialTicks = (float) (ageInTicks - Math.floor(ageInTicks));
                 float animationCount = player.getItemInUseCount() - partialTicks + 1.0F;
@@ -113,31 +129,55 @@ public abstract class ModelBipedMixin extends ModelBase implements IModelBipedSw
                 this.bipedLeftArm.rotateAngleX = this.rotLerpRad(f3, this.bipedLeftArm.rotateAngleX, 0.0F);
                 this.bipedRightArm.rotateAngleX = MathHelperNew.lerp(f2, this.bipedRightArm.rotateAngleX, 0.0F);
                 this.bipedLeftArm.rotateAngleY = this.rotLerpRad(f3, this.bipedLeftArm.rotateAngleY, (float) Math.PI);
-                this.bipedRightArm.rotateAngleY = MathHelperNew.lerp(f2, this.bipedRightArm.rotateAngleY, (float) Math.PI);
-                this.bipedLeftArm.rotateAngleZ = this.rotLerpRad(f3, this.bipedLeftArm.rotateAngleZ, (float) Math.PI + 1.8707964F * this.getArmAngleSq(f1) / this.getArmAngleSq(14.0F));
-                this.bipedRightArm.rotateAngleZ = MathHelperNew.lerp(f2, this.bipedRightArm.rotateAngleZ, (float) Math.PI - 1.8707964F * this.getArmAngleSq(f1) / this.getArmAngleSq(14.0F));
+                this.bipedRightArm.rotateAngleY = MathHelperNew
+                    .lerp(f2, this.bipedRightArm.rotateAngleY, (float) Math.PI);
+                this.bipedLeftArm.rotateAngleZ = this.rotLerpRad(
+                    f3,
+                    this.bipedLeftArm.rotateAngleZ,
+                    (float) Math.PI + 1.8707964F * this.getArmAngleSq(f1) / this.getArmAngleSq(14.0F));
+                this.bipedRightArm.rotateAngleZ = MathHelperNew.lerp(
+                    f2,
+                    this.bipedRightArm.rotateAngleZ,
+                    (float) Math.PI - 1.8707964F * this.getArmAngleSq(f1) / this.getArmAngleSq(14.0F));
             } else if (f1 >= 14.0F && f1 < 22.0F) {
 
                 float f10 = (f1 - 14.0F) / 8.0F;
-                this.bipedLeftArm.rotateAngleX = this.rotLerpRad(f3, this.bipedLeftArm.rotateAngleX, ((float) Math.PI / 2F) * f10);
-                this.bipedRightArm.rotateAngleX = MathHelperNew.lerp(f2, this.bipedRightArm.rotateAngleX, ((float) Math.PI / 2F) * f10);
+                this.bipedLeftArm.rotateAngleX = this
+                    .rotLerpRad(f3, this.bipedLeftArm.rotateAngleX, ((float) Math.PI / 2F) * f10);
+                this.bipedRightArm.rotateAngleX = MathHelperNew
+                    .lerp(f2, this.bipedRightArm.rotateAngleX, ((float) Math.PI / 2F) * f10);
                 this.bipedLeftArm.rotateAngleY = this.rotLerpRad(f3, this.bipedLeftArm.rotateAngleY, (float) Math.PI);
-                this.bipedRightArm.rotateAngleY = MathHelperNew.lerp(f2, this.bipedRightArm.rotateAngleY, (float) Math.PI);
-                this.bipedLeftArm.rotateAngleZ = this.rotLerpRad(f3, this.bipedLeftArm.rotateAngleZ, 5.012389F - 1.8707964F * f10);
-                this.bipedRightArm.rotateAngleZ = MathHelperNew.lerp(f2, this.bipedRightArm.rotateAngleZ, 1.2707963F + 1.8707964F * f10);
+                this.bipedRightArm.rotateAngleY = MathHelperNew
+                    .lerp(f2, this.bipedRightArm.rotateAngleY, (float) Math.PI);
+                this.bipedLeftArm.rotateAngleZ = this
+                    .rotLerpRad(f3, this.bipedLeftArm.rotateAngleZ, 5.012389F - 1.8707964F * f10);
+                this.bipedRightArm.rotateAngleZ = MathHelperNew
+                    .lerp(f2, this.bipedRightArm.rotateAngleZ, 1.2707963F + 1.8707964F * f10);
             } else if (f1 >= 22.0F && f1 < 26.0F) {
 
                 float f9 = (f1 - 22.0F) / 4.0F;
-                this.bipedLeftArm.rotateAngleX = this.rotLerpRad(f3, this.bipedLeftArm.rotateAngleX, ((float) Math.PI / 2F) - ((float) Math.PI / 2F) * f9);
-                this.bipedRightArm.rotateAngleX = MathHelperNew.lerp(f2, this.bipedRightArm.rotateAngleX, ((float) Math.PI / 2F) - ((float) Math.PI / 2F) * f9);
+                this.bipedLeftArm.rotateAngleX = this.rotLerpRad(
+                    f3,
+                    this.bipedLeftArm.rotateAngleX,
+                    ((float) Math.PI / 2F) - ((float) Math.PI / 2F) * f9);
+                this.bipedRightArm.rotateAngleX = MathHelperNew
+                    .lerp(f2, this.bipedRightArm.rotateAngleX, ((float) Math.PI / 2F) - ((float) Math.PI / 2F) * f9);
                 this.bipedLeftArm.rotateAngleY = this.rotLerpRad(f3, this.bipedLeftArm.rotateAngleY, (float) Math.PI);
-                this.bipedRightArm.rotateAngleY = MathHelperNew.lerp(f2, this.bipedRightArm.rotateAngleY, (float) Math.PI);
+                this.bipedRightArm.rotateAngleY = MathHelperNew
+                    .lerp(f2, this.bipedRightArm.rotateAngleY, (float) Math.PI);
                 this.bipedLeftArm.rotateAngleZ = this.rotLerpRad(f3, this.bipedLeftArm.rotateAngleZ, (float) Math.PI);
-                this.bipedRightArm.rotateAngleZ = MathHelperNew.lerp(f2, this.bipedRightArm.rotateAngleZ, (float) Math.PI);
+                this.bipedRightArm.rotateAngleZ = MathHelperNew
+                    .lerp(f2, this.bipedRightArm.rotateAngleZ, (float) Math.PI);
             }
 
-            this.bipedLeftLeg.rotateAngleX = MathHelperNew.lerp(this.swimAnimation, this.bipedLeftLeg.rotateAngleX, 0.3F * MathHelper.cos(limbSwing * 0.33333334F + (float) Math.PI));
-            this.bipedRightLeg.rotateAngleX = MathHelperNew.lerp(this.swimAnimation, this.bipedRightLeg.rotateAngleX, 0.3F * MathHelper.cos(limbSwing * 0.33333334F));
+            this.bipedLeftLeg.rotateAngleX = MathHelperNew.lerp(
+                this.swimAnimation,
+                this.bipedLeftLeg.rotateAngleX,
+                0.3F * MathHelper.cos(limbSwing * 0.33333334F + (float) Math.PI));
+            this.bipedRightLeg.rotateAngleX = MathHelperNew.lerp(
+                this.swimAnimation,
+                this.bipedRightLeg.rotateAngleX,
+                0.3F * MathHelper.cos(limbSwing * 0.33333334F));
 
             callbackInfo.cancel();
         }

@@ -17,7 +17,7 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
     modid = AquaAcrobatics.MODID,
     name = AquaAcrobatics.NAME,
     version = AquaAcrobatics.VERSION,
-    dependencies = "required-after:unimixins@[0.1.19,);",
+    dependencies = "required-after:unimixins@[0.1.19,);" + "required-after:gtnhlib@[0.6.16,);",
     acceptedMinecraftVersions = "[1.7.10]",
     acceptableRemoteVersions = "*")
 public class AquaAcrobatics {
@@ -40,16 +40,17 @@ public class AquaAcrobatics {
 
     @Mod.EventHandler
     public void onInit(final FMLInitializationEvent evt) {
-        proxy.onInit();
+        proxy.onInit(evt);
     }
 
     @Mod.EventHandler
     public void onPostInit(final FMLPostInitializationEvent evt) {
-        proxy.onPostInit();
+        proxy.onPostInit(evt);
     }
 
     @Mod.EventHandler
     public void onMappings(FMLModIdMappingEvent evt) {
         proxy.onMappings();
     }
+
 }

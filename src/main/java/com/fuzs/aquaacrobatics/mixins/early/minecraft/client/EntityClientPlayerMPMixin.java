@@ -7,9 +7,11 @@ import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.stats.StatFileWriter;
 import net.minecraft.util.Session;
 import net.minecraft.world.World;
+
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
+
 import com.fuzs.aquaacrobatics.client.entity.IPlayerSPSwimming;
 import com.fuzs.aquaacrobatics.config.ConfigHandler;
 import com.fuzs.aquaacrobatics.entity.player.IPlayerResizeable;
@@ -43,7 +45,9 @@ public class EntityClientPlayerMPMixin extends EntityPlayerSP implements IPlayer
     @Override
     public boolean isForcedDown() {
 
-        return ((IPlayerResizeable) this).isResizingAllowed() && !this.capabilities.isFlying ? this.isSneaking() || ((IPlayerResizeable) this).isVisuallySwimming() : this.isActuallySneaking();
+        return ((IPlayerResizeable) this).isResizingAllowed() && !this.capabilities.isFlying
+            ? this.isSneaking() || ((IPlayerResizeable) this).isVisuallySwimming()
+            : this.isActuallySneaking();
     }
 
     @Override

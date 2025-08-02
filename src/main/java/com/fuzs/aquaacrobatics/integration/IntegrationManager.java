@@ -2,7 +2,9 @@ package com.fuzs.aquaacrobatics.integration;
 
 import java.util.LinkedList;
 import java.util.List;
+
 import com.fuzs.aquaacrobatics.config.ConfigHandler;
+
 import cpw.mods.fml.common.Loader;
 
 public class IntegrationManager {

@@ -6,7 +6,9 @@ import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.function.BiPredicate;
 import java.util.function.Consumer;
+
 import javax.annotation.Nullable;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
@@ -26,14 +28,16 @@ public class AxisAlignedBBSpliterator extends Spliterators.AbstractSpliterator<A
     private final World reader;
     private boolean isEntityPresent;
     private final BiPredicate<Block, BlockPos> statePositionPredicate;
-    public static final AxisAlignedBB FULL_BLOCK_AABB = AxisAlignedBB.getBoundingBox(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D);
+    public static final AxisAlignedBB FULL_BLOCK_AABB = AxisAlignedBB
+        .getBoundingBox(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D);
 
     public AxisAlignedBBSpliterator(World reader, @Nullable Entity entity, AxisAlignedBB aabb) {
 
         this(reader, entity, aabb, (state, pos) -> true);
     }
 
-    public AxisAlignedBBSpliterator(World reader, @Nullable Entity entity, AxisAlignedBB aabb, BiPredicate<Block, BlockPos> statePositionPredicate) {
+    public AxisAlignedBBSpliterator(World reader, @Nullable Entity entity, AxisAlignedBB aabb,
+        BiPredicate<Block, BlockPos> statePositionPredicate) {
 
         super(Long.MAX_VALUE, Spliterator.NONNULL | Spliterator.IMMUTABLE);
         this.reader = reader;
@@ -78,18 +82,21 @@ public class AxisAlignedBBSpliterator extends Spliterators.AbstractSpliterator<A
 
             // piston check is new, not sure if it really helps in this version
             Block blockstate = this.reader.getBlock(mutablePos.getX(), mutablePos.getY(), mutablePos.getZ());
-            if (!this.statePositionPredicate.test(blockstate, mutablePos) || boundariesTouched == 2 && blockstate != Blocks.piston_extension) {
+            if (!this.statePositionPredicate.test(blockstate, mutablePos)
+                || boundariesTouched == 2 && blockstate != Blocks.piston_extension) {
 
                 continue;
             }
 
             // check full blocks first as they're easier to handle
-            AxisAlignedBB collisionBoundingBox = blockstate.getCollisionBoundingBoxFromPool(this.reader, mutablePos.getX(), mutablePos.getY(), mutablePos.getZ());
+            AxisAlignedBB collisionBoundingBox = blockstate
+                .getCollisionBoundingBoxFromPool(this.reader, mutablePos.getX(), mutablePos.getY(), mutablePos.getZ());
             if (collisionBoundingBox == FULL_BLOCK_AABB && blockstate.renderAsNormalBlock()) {
 
                 // second check probably not necessary
                 AxisAlignedBB aabbOffset = collisionBoundingBox.offset(x, y, z);
-                if (!this.aabb.intersectsWith(aabbOffset) || this.entity != null && !this.entity.boundingBox.intersectsWith(aabbOffset)) {
+                if (!this.aabb.intersectsWith(aabbOffset)
+                    || this.entity != null && !this.entity.boundingBox.intersectsWith(aabbOffset)) {
 
                     continue;
                 }
@@ -119,11 +126,25 @@ public class AxisAlignedBBSpliterator extends Spliterators.AbstractSpliterator<A
         BlockPos.PooledMutableBlockPos mutablePos) {
 
         // only retain boxes colliding with both the area of interest and the current entity if present
-        blockstate.addCollisionBoxesToList(this.reader, mutablePos.getX(), mutablePos.getY(), mutablePos.getZ(), this.aabb, collidingBoxes, this.entity);
+        blockstate.addCollisionBoxesToList(
+            this.reader,
+            mutablePos.getX(),
+            mutablePos.getY(),
+            mutablePos.getZ(),
+            this.aabb,
+            collidingBoxes,
+            this.entity);
         if (this.entity != null) {
 
             List<AxisAlignedBB> entityCollidingBoxes = Lists.newArrayList();
-            blockstate.addCollisionBoxesToList(this.reader, mutablePos.getX(), mutablePos.getY(), mutablePos.getZ(), this.entity.boundingBox, entityCollidingBoxes, this.entity);
+            blockstate.addCollisionBoxesToList(
+                this.reader,
+                mutablePos.getX(),
+                mutablePos.getY(),
+                mutablePos.getZ(),
+                this.entity.boundingBox,
+                entityCollidingBoxes,
+                this.entity);
             collidingBoxes.retainAll(entityCollidingBoxes);
         }
     }
@@ -132,25 +153,28 @@ public class AxisAlignedBBSpliterator extends Spliterators.AbstractSpliterator<A
 
         Objects.requireNonNull(this.entity);
         this.isEntityPresent = false;
-//        WorldBorder worldborder = this.reader.getWorldBorder();
-//        AxisAlignedBB axisalignedbb = this.entity.getEntityBoundingBox();
-//        if (!isBoundingBoxWithinBorder(worldborder, axisalignedbb)) {
-//
-//            AxisAlignedBB borderShape = new AxisAlignedBB(worldborder.minX(), Double.NEGATIVE_INFINITY, worldborder.minZ(), worldborder.maxX(), Double.POSITIVE_INFINITY, worldborder.maxZ());
-//            consumer.accept(borderShape);
-//            return true;
-//        }
+        // WorldBorder worldborder = this.reader.getWorldBorder();
+        // AxisAlignedBB axisalignedbb = this.entity.getEntityBoundingBox();
+        // if (!isBoundingBoxWithinBorder(worldborder, axisalignedbb)) {
+        //
+        // AxisAlignedBB borderShape = new AxisAlignedBB(worldborder.minX(), Double.NEGATIVE_INFINITY,
+        // worldborder.minZ(), worldborder.maxX(), Double.POSITIVE_INFINITY, worldborder.maxZ());
+        // consumer.accept(borderShape);
+        // return true;
+        // }
 
         return false;
     }
 
-//    public static boolean isBoundingBoxWithinBorder(WorldBorder worldBorder, AxisAlignedBB entityBoundingBox) {
-//
-//        double minX = MathHelper.floor(worldBorder.minX());
-//        double minZ = MathHelper.floor(worldBorder.minZ());
-//        double maxX = MathHelper.ceil(worldBorder.maxX());
-//        double maxZ = MathHelper.ceil(worldBorder.maxZ());
-//        return entityBoundingBox.minX > minX && entityBoundingBox.minX < maxX && entityBoundingBox.minZ > minZ && entityBoundingBox.minZ < maxZ && entityBoundingBox.maxX > minX && entityBoundingBox.maxX < maxX && entityBoundingBox.maxZ > minZ && entityBoundingBox.maxZ < maxZ;
-//    }
+    // public static boolean isBoundingBoxWithinBorder(WorldBorder worldBorder, AxisAlignedBB entityBoundingBox) {
+    //
+    // double minX = MathHelper.floor(worldBorder.minX());
+    // double minZ = MathHelper.floor(worldBorder.minZ());
+    // double maxX = MathHelper.ceil(worldBorder.maxX());
+    // double maxZ = MathHelper.ceil(worldBorder.maxZ());
+    // return entityBoundingBox.minX > minX && entityBoundingBox.minX < maxX && entityBoundingBox.minZ > minZ &&
+    // entityBoundingBox.minZ < maxZ && entityBoundingBox.maxX > minX && entityBoundingBox.maxX < maxX &&
+    // entityBoundingBox.maxZ > minZ && entityBoundingBox.maxZ < maxZ;
+    // }
 
 }

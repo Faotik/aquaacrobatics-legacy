@@ -1,11 +1,13 @@
 package com.fuzs.aquaacrobatics.network;
 
 import com.fuzs.aquaacrobatics.network.message.PacketSendKey;
+
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.relauncher.Side;
 
 public class NetworkHandler {
+
     private static int packetId = 0;
 
     public static SimpleNetworkWrapper INSTANCE = null;

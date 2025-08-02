@@ -20,8 +20,12 @@ public class MovementInputStorage extends MovementInput {
 
     public static void updatePlayerMoveState(MovementInput movement, GameSettings gameSettings, boolean isCrouching) {
 
-        movement.moveForward = gameSettings.keyBindForward.getIsKeyPressed() == gameSettings.keyBindBack.getIsKeyPressed() ? 0.0F : gameSettings.keyBindForward.getIsKeyPressed() ? 1.0F : -1.0F;
-        movement.moveStrafe = gameSettings.keyBindLeft.getIsKeyPressed() == gameSettings.keyBindRight.getIsKeyPressed() ? 0.0F : gameSettings.keyBindLeft.getIsKeyPressed() ? 1.0F : -1.0F;
+        movement.moveForward = gameSettings.keyBindForward.getIsKeyPressed()
+            == gameSettings.keyBindBack.getIsKeyPressed() ? 0.0F
+                : gameSettings.keyBindForward.getIsKeyPressed() ? 1.0F : -1.0F;
+        movement.moveStrafe = gameSettings.keyBindLeft.getIsKeyPressed() == gameSettings.keyBindRight.getIsKeyPressed()
+            ? 0.0F
+            : gameSettings.keyBindLeft.getIsKeyPressed() ? 1.0F : -1.0F;
         movement.jump = gameSettings.keyBindJump.getIsKeyPressed();
         movement.sneak = gameSettings.keyBindSneak.getIsKeyPressed();
         if (isCrouching) {

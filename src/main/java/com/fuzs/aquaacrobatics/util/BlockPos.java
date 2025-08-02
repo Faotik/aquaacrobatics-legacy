@@ -61,7 +61,10 @@ public class BlockPos {
     }
 
     public BlockPos(Vec3 vec) {
-        this(MathHelper.floor_double(vec.xCoord), MathHelper.floor_double(vec.yCoord), MathHelper.floor_double(vec.zCoord));
+        this(
+            MathHelper.floor_double(vec.xCoord),
+            MathHelper.floor_double(vec.yCoord),
+            MathHelper.floor_double(vec.zCoord));
     }
 
     public BlockPos(Entity entity) {
@@ -108,7 +111,8 @@ public class BlockPos {
     }
 
     public BlockPos add(double x, double y, double z) {
-        return x == 0.0D && y == 0.0D && z == 0.0D ? this : new BlockPos((double) this.getX() + x, (double) this.getY() + y, (double) this.getZ() + z);
+        return x == 0.0D && y == 0.0D && z == 0.0D ? this
+            : new BlockPos((double) this.getX() + x, (double) this.getY() + y, (double) this.getZ() + z);
     }
 
     public BlockPos add(BlockPos pos) {
@@ -137,12 +141,16 @@ public class BlockPos {
     /**
      * Offset this BlockPos 1 block up
      */
-    public BlockPos up() {return this.up(1);}
+    public BlockPos up() {
+        return this.up(1);
+    }
 
     /**
      * Offset this BlockPos n blocks up
      */
-    public BlockPos up(int n) {return this.offset(ForgeDirection.UP, n);}
+    public BlockPos up(int n) {
+        return this.offset(ForgeDirection.UP, n);
+    }
 
     /**
      * Offset this BlockPos 1 block down
@@ -228,7 +236,10 @@ public class BlockPos {
      * @param n      The number of blocks to offset by
      */
     public BlockPos offset(ForgeDirection facing, int n) {
-        return new BlockPos(this.getX() + facing.offsetX * n, this.getY() + facing.offsetY * n, this.getZ() + facing.offsetZ * n);
+        return new BlockPos(
+            this.getX() + facing.offsetX * n,
+            this.getY() + facing.offsetY * n,
+            this.getZ() + facing.offsetZ * n);
     }
 
     public BlockPos rotate(int rotation) {
@@ -351,16 +362,24 @@ public class BlockPos {
     }
 
     public static BlockPos minOf(BlockPos p1, BlockPos p2) {
-        return new BlockPos(Math.min(p1.getX(), p2.getX()), Math.min(p1.getY(), p2.getY()), Math.min(p1.getZ(), p2.getZ()));
+        return new BlockPos(
+            Math.min(p1.getX(), p2.getX()),
+            Math.min(p1.getY(), p2.getY()),
+            Math.min(p1.getZ(), p2.getZ()));
     }
 
     public static BlockPos maxOf(BlockPos p1, BlockPos p2) {
-        return new BlockPos(Math.max(p1.getX(), p2.getX()), Math.max(p1.getY(), p2.getY()), Math.max(p1.getZ(), p2.getZ()));
+        return new BlockPos(
+            Math.max(p1.getX(), p2.getX()),
+            Math.max(p1.getY(), p2.getY()),
+            Math.max(p1.getZ(), p2.getZ()));
     }
 
     public static Iterable<BlockPos> getAllInBox(AxisAlignedBB aabb) {
         AABBFix(aabb);
-        return getAllInBox(new BlockPos(aabb.minX, aabb.minY, aabb.minZ), new BlockPos(Math.ceil(aabb.maxX) - 1, Math.ceil(aabb.maxY) - 1, Math.ceil(aabb.maxZ) - 1));
+        return getAllInBox(
+            new BlockPos(aabb.minX, aabb.minY, aabb.minZ),
+            new BlockPos(Math.ceil(aabb.maxX) - 1, Math.ceil(aabb.maxY) - 1, Math.ceil(aabb.maxZ) - 1));
     }
 
     /**
@@ -464,7 +483,13 @@ public class BlockPos {
     }
 
     public static Iterable<BlockPos.MutableBlockPos> getAllInBoxMutable(BlockPos from, BlockPos to) {
-        return getAllInBoxMutable(Math.min(from.getX(), to.getX()), Math.min(from.getY(), to.getY()), Math.min(from.getZ(), to.getZ()), Math.max(from.getX(), to.getX()), Math.max(from.getY(), to.getY()), Math.max(from.getZ(), to.getZ()));
+        return getAllInBoxMutable(
+            Math.min(from.getX(), to.getX()),
+            Math.min(from.getY(), to.getY()),
+            Math.min(from.getZ(), to.getZ()),
+            Math.max(from.getX(), to.getX()),
+            Math.max(from.getY(), to.getY()),
+            Math.max(from.getZ(), to.getZ()));
     }
 
     public static Iterable<BlockPos.MutableBlockPos> getAllInBoxMutable(final int x1, final int y1, final int z1,
@@ -583,7 +608,8 @@ public class BlockPos {
         }
 
         public BlockPos.MutableBlockPos setPos(double xIn, double yIn, double zIn) {
-            return this.setPos(MathHelper.floor_double(xIn), MathHelper.floor_double(yIn), MathHelper.floor_double(zIn));
+            return this
+                .setPos(MathHelper.floor_double(xIn), MathHelper.floor_double(yIn), MathHelper.floor_double(zIn));
         }
 
         @SideOnly(Side.CLIENT)

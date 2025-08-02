@@ -5,6 +5,7 @@ import com.fuzs.aquaacrobatics.biome.BiomeWaterFogColors;
 import com.fuzs.aquaacrobatics.client.handler.FogHandler;
 import com.gtnewhorizon.gtnhlib.config.Config;
 import com.gtnewhorizon.gtnhlib.eventbus.EventBusSubscriber;
+
 import cpw.mods.fml.client.event.ConfigChangedEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
@@ -41,7 +42,7 @@ public class ConfigHandler {
 
     public static class MovementConfig {
 
-        @Config.Name("Easy Elytra Takeoff")
+        @Config.Name("Easy Elytra Takeoff" + " (Not working)")
         @Config.Comment("Taking off with an elytra from the ground is now far easier like in Minecraft 1.15 and onwards.")
         public static boolean easyElytraTakeoff = true;
 
@@ -59,11 +60,11 @@ public class ConfigHandler {
 
         @Config.Name("Enable Crawling")
         @Config.Comment("Enables crawling to prevent suffocation. Note that if you disable this there will probably be behavioral differences from 1.13.")
-        public static boolean enableCrawling = false;
+        public static boolean enableCrawling = true;
 
         @Config.Name("Enable Toggle Crawling")
         @Config.Comment("Enables a keybind to toggle crawling.")
-        public static boolean enableToggleCrawling = false;
+        public static boolean enableToggleCrawling = true;
 
         @Config.Name("New Projectile Behavior")
         @Config.Comment("Modify projectile behavior to be closer to that of newer versions (fixes MC-73884 and allows bubble columns to work with ender pearls).")
@@ -87,7 +88,7 @@ public class ConfigHandler {
 
         @Config.Name("New Water")
         @Config.Comment("Use the new water rendering in 1.13+.")
-        public static boolean newWaterColors = true;
+        public static boolean newWaterColors = false;
 
         @Config.Name("New Water Fog")
         @Config.Comment("Use the new fog rendering in 1.13+.")
