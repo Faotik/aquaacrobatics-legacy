@@ -27,7 +27,6 @@ public class WaterResourcePack extends AbstractResourcePack {
 
     @Override
     protected InputStream getInputStreamByName(String name) throws IOException {
-        System.out.println("Loading resource: " + name);
         if (name.equals("pack.mcmeta")) return AquaAcrobatics.class.getResourceAsStream("/water_pack.mcmeta");
         String truePath = "/" + name.replace("minecraft", "aquaacrobatics/overrides");
         return AquaAcrobatics.class.getResourceAsStream(truePath);

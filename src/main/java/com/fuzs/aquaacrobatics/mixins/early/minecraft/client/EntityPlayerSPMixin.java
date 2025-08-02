@@ -197,11 +197,6 @@ public abstract class EntityPlayerSPMixin extends AbstractClientPlayer implement
     }
 
     private static boolean isAxisAlignedBBNotClear(World world, @Nullable Entity entity, AxisAlignedBB aabb) {
-        System.out.println(
-            "Checking AABB: " + aabb
-                + " for createAxisAlignedBBStream: "
-                + createAxisAlignedBBStream(world, entity, aabb).allMatch(Objects::isNull));
-
         return createAxisAlignedBBStream(world, entity, aabb).allMatch(Objects::isNull);
     }
 
