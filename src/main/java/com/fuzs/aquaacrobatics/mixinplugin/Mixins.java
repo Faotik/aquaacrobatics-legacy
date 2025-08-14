@@ -19,7 +19,6 @@ public enum Mixins {
         .setPhase(Phase.EARLY)
         .addMixinClasses(
             "minecraft.EntityBoatMixin",
-            "minecraft.EntityItemMixin",
             "minecraft.EntityPlayerMixin",
             "minecraft.EntityPlayerMPMixin",
             "minecraft.EntityMixin",
@@ -46,8 +45,14 @@ public enum Mixins {
             "minecraft.client.EntityOtherPlayerMPMixin",
             "minecraft.client.PlayerControllerMPMixin")),
 
+    EntityItem(new Builder(" EntityItem").addTargetedMod(TargetedMod.VANILLA)
+        .addExcludedMod(TargetedMod.ITEMPHYSIC)
+        .setSide(Side.BOTH)
+        .setPhase(Phase.EARLY)
+        .addMixinClasses("minecraft.EntityItemMixin")),
+
     BlockGrass(new Builder(" BlockGrass").addTargetedMod(TargetedMod.VANILLA)
-        .addExcludedMod(TargetedMod.Hodgepodge)
+        .addExcludedMod(TargetedMod.HODGEPODGE)
         .setSide(Side.BOTH)
         .setPhase(Phase.EARLY)
         .addMixinClasses("minecraft.BlockGrassMixin"))

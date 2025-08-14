@@ -3,7 +3,10 @@ package com.fuzs.aquaacrobatics.mixinplugin;
 public enum TargetedMod {
 
     VANILLA("Minecraft", null),
-    Hodgepodge("Hodgepodge", "com.mitchej123.hodgepodge.core.HodgepodgeCore", "hodgepodge"),;
+    HODGEPODGE("Hodgepodge", "com.mitchej123.hodgepodge.core.HodgepodgeCore", "hodgepodge"),
+    ITEMPHYSIC("ItemPhysic", "com.creativemd.itemphysic.asm.ItemPhysicEarlyMixins", "itemphysic"),
+
+    ;
 
     /** The "name" in the @Mod annotation */
     public final String modName;
