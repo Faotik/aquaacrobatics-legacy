@@ -1,32 +1,24 @@
 package com.fuzs.aquaacrobatics.mixinplugin;
 
-public enum TargetedMod {
+import com.gtnewhorizon.gtnhmixins.builders.ITargetMod;
+import com.gtnewhorizon.gtnhmixins.builders.TargetModBuilder;
 
-    VANILLA("Minecraft", null),
-    HODGEPODGE("Hodgepodge", "com.mitchej123.hodgepodge.core.HodgepodgeCore", "hodgepodge"),
-    ITEMPHYSIC("ItemPhysic", "com.creativemd.itemphysic.asm.ItemPhysicEarlyMixins", "itemphysic"),
+public enum TargetedMod implements ITargetMod {
+
+    HODGEPODGE("com.mitchej123.hodgepodge.core.HodgepodgeCore", "hodgepodge"),
+    ITEMPHYSIC("com.creativemd.itemphysic.asm.ItemPhysicEarlyMixins", "itemphysic"),
 
     ;
 
-    /** The "name" in the @Mod annotation */
-    public final String modName;
-    /** Class that implements the IFMLLoadingPlugin interface */
-    public final String coreModClass;
-    /** The "modid" in the @Mod annotation */
-    public final String modId;
+    private final TargetModBuilder builder;
 
-    TargetedMod(String modName, String coreModClass) {
-        this(modName, coreModClass, null);
-    }
-
-    TargetedMod(String modName, String coreModClass, String modId) {
-        this.modName = modName;
-        this.coreModClass = coreModClass;
-        this.modId = modId;
+    TargetedMod(String coreModClass, String modId) {
+        this.builder = new TargetModBuilder().setCoreModClass(coreModClass)
+            .setModId(modId);
     }
 
     @Override
-    public String toString() {
-        return "TargetedMod{modName='" + modName + "', coreModClass='" + coreModClass + "', modId='" + modId + "'}";
+    public TargetModBuilder getBuilder() {
+        return builder;
     }
 }

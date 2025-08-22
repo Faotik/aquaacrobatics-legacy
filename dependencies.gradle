@@ -34,13 +34,14 @@
  * For more details, see https://docs.gradle.org/8.0.1/userguide/java_library_plugin.html#sec:java_library_configurations_graph
  */
 dependencies {
-    api("com.github.GTNewHorizons:GTNHLib:0.6.16:dev")
+    api("com.github.GTNewHorizons:GTNHLib:0.6.39:dev")
+//    api("com.github.GTNewHorizons:Hardcore-Ender-Expansion:1.12.13-GTNH:dev")
 
-    compileOnly("com.github.GTNewHorizons:Applied-Energistics-2-Unofficial:rv3-beta-561-GTNH:dev")
-    compileOnly("com.github.GTNewHorizons:Galacticraft:3.3.5-GTNH:dev")
+    compileOnly("com.github.GTNewHorizons:Applied-Energistics-2-Unofficial:rv3-beta-675-GTNH:dev")
+    compileOnly("com.github.GTNewHorizons:Galacticraft:3.3.11-GTNH:dev")
     compileOnly rfg.deobf('curse.maven:et-futurum-requiem-441392:5873837')
     compileOnly(rfg.deobf("curse.maven:hats-229073:2232170"))
     compileOnly(rfg.deobf("curse.maven:morph-229080:2338151"))
 
-    runtimeOnlyNonPublishable("com.github.GTNewHorizons:NotEnoughItems:2.7.34-GTNH:dev")
+    runtimeOnlyNonPublishable("com.github.GTNewHorizons:NotEnoughItems:2.7.76-GTNH:dev")
 }

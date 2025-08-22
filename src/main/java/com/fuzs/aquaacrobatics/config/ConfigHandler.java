@@ -88,7 +88,7 @@ public class ConfigHandler {
 
         @Config.Name("New Water")
         @Config.Comment("Use the new water rendering in 1.13+.")
-        public static boolean newWaterColors = false;
+        public static boolean newWaterColors = true;
 
         @Config.Name("New Water Fog")
         @Config.Comment("Use the new fog rendering in 1.13+.")

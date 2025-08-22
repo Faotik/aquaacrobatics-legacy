@@ -347,8 +347,9 @@ public abstract class EntityPlayerMixin extends EntityLivingBase implements IPla
     public Pose getPose() {
         // Add null check to prevent NPE during initialization
         try {
-            return Pose.values()[this.getDataWatcher()
-                .getWatchableObjectInt(poseId)];
+            int poseOrdinal = this.getDataWatcher()
+                .getWatchableObjectInt(poseId);
+            return Pose.values()[poseOrdinal];
         } catch (Exception e) {
             // Return default pose if DataWatcher isn't ready yet
             return Pose.STANDING;
@@ -403,7 +404,8 @@ public abstract class EntityPlayerMixin extends EntityLivingBase implements IPla
         if (this.getShouldBeDead()) {
 
             // this is completely ignored in vanilla
-            this.setPose(Pose.DYING);
+            // this.setPose(Pose.DYING);
+            this.setPose(Pose.STANDING);
         } else if (this.isPlayerSleeping()) {
 
             // handle this before swimming pose clear check
